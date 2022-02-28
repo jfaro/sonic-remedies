@@ -1,10 +1,7 @@
 # Sonic Remedies 🎶
----
 
 ## Overview
 Sonic Remedies is a data collection tool for learning how to create personalized audio therapy.
-
---- 
 
 ## Available Scripts
 
