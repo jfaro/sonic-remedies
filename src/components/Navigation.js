@@ -1,18 +1,19 @@
 import { useState } from 'react';
 import { Button } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, matchPath, useMatch } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 export default function Navigation() {
-    const { user, login, logout } = useAuth();
+    const { user, logout } = useAuth();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const loginPathMatch = useMatch('/login');
 
-    async function handleLogin() {
+    async function handleLogout() {
         setLoading(true);
         try {
-            await login();
+            await logout();
         } catch {
             // TODO: Handle failed login...
         }
@@ -20,36 +21,32 @@ export default function Navigation() {
         setLoading(false);
     }
 
-    async function handleLogout() {
-        setLoading(true);
-        try {
-            await logout();
-        } catch {
-            // TODO: Handle failed logout...
-        }
-        navigate('/');
-        setLoading(false);
+    // Show login button if no user is logged in
+    // Don't render login button if on login page
+    // Show logout button if a user is logged in
+    let loginLogout = null;
+
+    if (!user && !loginPathMatch) {
+        loginLogout = (
+            <Link to='/login'>
+                <Button type='ghost'>Login</Button>
+            </Link>);
+    } else if (user) {
+        loginLogout = (
+            <Button
+                type='ghost'
+                onClick={handleLogout}
+                loading={loading}>
+                Logout
+            </Button>
+        )
     }
 
     return (
         <nav className='navigation'>
             <Link to="/">Home</Link>
             <Link to="/survey">Survey</Link>
-
-            {user ?
-                <Button
-                    type='ghost'
-                    loading={loading}
-                    onClick={handleLogout}>
-                    Logout
-                </Button>
-                :
-                <Button
-                    type='ghost'
-                    loading={loading}
-                    onClick={handleLogin}>
-                    Login
-                </Button>}
+            {loginLogout}
         </nav>
     )
 }
