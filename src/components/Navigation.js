@@ -46,6 +46,8 @@ export default function Navigation() {
         <nav className='navigation'>
             <Link to="/">Home</Link>
             <Link to="/survey">Survey</Link>
+            {/* This is for testing purposes. Remove before production */}
+            <Link to="/admin">Admin</Link> 
             {loginLogout}
         </nav>
     )
