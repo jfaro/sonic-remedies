@@ -27,7 +27,7 @@ export default function MusicForm() {
         values.length = fixedLength;
         let file = values.filename.split('.')[0];
 
-        set(ref(database, 'pieces/' + file), {values});
+        set(ref(database, 'pieces/' + file), values);
 
         console.log("Success:", values);
     };
