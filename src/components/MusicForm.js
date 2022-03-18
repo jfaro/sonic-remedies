@@ -54,6 +54,7 @@ export default function MusicForm() {
                 // Upload completed successfully, now we can get the download URL
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                     console.log('File available at', downloadURL);
+                    values.url = downloadURL;
                 });
             }
         );

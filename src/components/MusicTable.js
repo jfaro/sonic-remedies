@@ -1,20 +1,25 @@
 import { Table } from 'antd';
-import { getDatabase, ref, onValue} from "firebase/database";
+import { onSnapshot, query, collection, getFirestore } from "firebase/firestore";
+import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 import { useState } from 'react';
-import moment from 'moment';
 
 /**
  * This component, MusicTable, is used as part of the administrative half of the site.
  * It is used to display the song database to the administrator.
  * TODOs:
  *    - Add filtering to the table
+ * 
+ * ANDREW NOTE:
+ * Hello future programmers! Yes, I know my use of React state here is atrocious, 
+ * especially when combined with the Firestore onSnapshot() function. Is there a better way
+ * to have these work that doesn't rerender like 10 times? I don't know! Good luck!
  */
 export default function MusicTable() {
-    const database = getDatabase();
-    const piecesRef = ref(database, 'pieces/');
+    const database = getFirestore();
+    const storage = getStorage();
+    const songData = query(collection(database, "songs"));
     const [loading, setLoading] = useState(true);
-    const [pieces, setPieces] = useState([]);
-
+    const [songs, setSongs] = useState([]);
 
     const columns = [
         {
@@ -22,6 +27,7 @@ export default function MusicTable() {
             dataIndex: 'filename',
             defaultSortOrder: 'ascend',
             sorter: (a, b) => a.filename.localeCompare(b.filename),
+            render: (filename, row) => <a href={row.url}>{filename}</a>
         },
         {
             title: 'Track Title',
@@ -78,30 +84,28 @@ export default function MusicTable() {
             sorter: (a, b) => a.tempo - b.tempo,
             // filter
         },
-    ];
- 
-    onValue(piecesRef, (snapshot) => {
-        if(snapshot.hasChildren())
         {
-            const data = snapshot.val();
-            const pieceArray = processPieces(data);
-            if (pieceArray.length !== pieces.length)
-            {
-                setPieces(pieceArray);
-            }
-            if (loading === true)
-            {
-                setLoading(false);
-            }   
-            console.log(pieces);
+            title: "Download Link",
+            dataIndex: "url",
+            key: "url"
+        },
+    ].filter(col => col.dataIndex !== 'url');
+ 
+    onSnapshot(songData, (snapshot) => {
+        let songList = [];
+        snapshot.forEach((doc) => {
+            songList.push(doc.data());
+        });
+        if(songList.length !== songs.length)
+        {
+            setSongs(songList);
         }
+        if (loading === true)
+        {
+            setLoading(false);
+        }
+        console.log(songs);
     });
-
-    function processPieces(data) {
-        let tempPieces = [];
-        Object.values(data).forEach(val => tempPieces.push(val));
-        return tempPieces;
-    };
 
     // Temporary function, remove later.
     function onChange(pagination, filters, sorter, extra) {
@@ -111,7 +115,7 @@ export default function MusicTable() {
     return (
         <Table 
             columns={columns} 
-            dataSource={pieces} 
+            dataSource={songs} 
             loading={loading}
             onChange={onChange} 
         />
