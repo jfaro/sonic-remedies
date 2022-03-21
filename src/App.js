@@ -10,7 +10,7 @@ import { AuthProvider } from './contexts/AuthContext';
 
 import Home from './pages/Home';
 import Survey from './pages/Survey';
-import Admin from './pages/Admin';
+import Admin from './pages/admin/Admin';
 import Login from './pages/Login';
 import CreateSurvey from './pages/admin/CreateSurvey';
 import Surveys from './pages/admin/Surveys';
