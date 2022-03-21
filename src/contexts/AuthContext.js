@@ -1,5 +1,6 @@
+import { collection, getDocs, query } from 'firebase/firestore';
 import React, { useContext, useEffect, useState } from 'react';
-import { auth, signInWithGoogle, signOut } from '../services/firebase';
+import { auth, db } from '../services/firebase';
 
 // Create context
 const AuthContext = React.createContext();
@@ -12,31 +13,40 @@ export function useAuth() {
 // Provider
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
+    const [isAdmin, setIsAdmin] = useState(false);
     const [loading, setLoading] = useState(true);
 
     // Detect active user changes
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
             setUser(user);
+            setAdminStatus(user);
             setLoading(false);
         })
         return unsubscribe;   // Unsubscribe listener on unmount
     }, [])
 
-    // Sign in with Google - returns a promise
-    function login() {
-        return signInWithGoogle()
-    }
+    async function setAdminStatus(user) {
+        if (!user) {
+            setIsAdmin(false);
+            return;
+        }
 
-    // Sign out - returns a promise with success/fail status
-    function logout() {
-        return signOut(auth)
-            .then(() => { console.log("Sign-out successful.") })
-            .catch(error => { console.log("An error happened.") })
+        // Set admin status
+        const querySnapshot = await getDocs(collection(db, 'users'));
+        querySnapshot.forEach(doc => {
+
+            // users => admin => uids
+            if (doc.id == 'admin') {
+                const adminData = doc.data();
+                setIsAdmin(adminData && adminData.uids.includes(user.uid))
+            }
+            console.log("admin status:", isAdmin)
+        })
     }
 
     // Data exposed by context 
-    const value = { user, login, logout }
+    const value = { user, isAdmin }
 
     return (
         <AuthContext.Provider value={value}>
