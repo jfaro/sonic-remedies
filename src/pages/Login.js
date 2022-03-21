@@ -1,37 +1,49 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
-import { Button } from 'antd';
+import { Button, Space, Typography } from 'antd';
 import { GoogleOutlined } from '@ant-design/icons';
+import { login } from '../services/firebase'
 import { useAuth } from '../contexts/AuthContext';
 
+const { Title, Text } = Typography;
+
 export default function Login() {
-    const { user, login } = useAuth();
+    const [isMounted, setIsMounted] = useState(false);
+    const { user } = useAuth();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        setIsMounted(true);
+        return () => { setIsMounted(false) }
+    })
 
     async function handleLogin() {
         setLoading(true);
         try {
             await login();
         } catch {
-            // TODO: Handle failed login...
+            navigate('/');
         }
-        setLoading(false);
+        if (isMounted) setLoading(false);
         navigate('/');
     }
 
     return (
         <>
             {user && <Navigate to='/' replace={true} />}
-            <h1>Login</h1>
-            <p>Please sign in before taking the survey!</p>
-            <Button
-                type='primary'
-                loading={loading}
-                onClick={handleLogin}
-                icon={<GoogleOutlined />}>
-                Sign in with Google
-            </Button>
+            <Title>Login</Title>
+
+            <Space direction='vertical' align='center' size='large'>
+                <Text>Please sign in before taking the survey!</Text>
+                <Button
+                    type='primary'
+                    loading={loading}
+                    onClick={handleLogin}
+                    icon={<GoogleOutlined />}>
+                    Sign in with Google
+                </Button>
+            </Space>
         </>
     )
 }

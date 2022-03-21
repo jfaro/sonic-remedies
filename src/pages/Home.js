@@ -1,23 +1,24 @@
 import { Link } from "react-router-dom";
-import { Button } from 'antd';
+import { Button, Space, Typography } from "antd";
 import { useAuth } from "../contexts/AuthContext";
 
+const { Title, Text } = Typography;
+
 export default function Home() {
-    const { user } = useAuth();
+    const { user, isAdmin } = useAuth();
 
     return (
         <>
-            <h1>Sonic Remedies</h1>
+            <Title>Sonic Remedies</Title>
 
-            {/* User greeting */}
-            {user && <p>Hello, {user.displayName}!</p>}
+            <Space direction='vertical' align='center' size='large'>
+                {user && <Text>Hello, {isAdmin && 'administrator'} {user.displayName}!</Text>}
 
-            <p style={{ maxWidth: '400px', textAlign: 'center' }}>
-                Sonic remedies is a data collection tool that aims to learn how to create personalized therapeutic audio.
-            </p>
-            <Link to="/survey">
-                <Button type="primary">Take the survey!</Button>
-            </Link>
+                <Text>Sonic remedies is a data collection tool that aims to learn how to create personalized therapeutic audio.</Text>
+                <Link to="/survey">
+                    <Button type="primary">Take the survey!</Button>
+                </Link>
+            </Space>
         </>
     )
 }

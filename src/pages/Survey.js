@@ -1,13 +1,43 @@
-import { useState } from 'react';
-import { Form, Input, Button } from 'antd';
+import React from 'react';
+import { Form, Input, Button, Space, Typography } from 'antd';
+import AudioPlayer from '../components/AudioPlayer';
+
+const { Title, Text } = Typography;
 
 export default function Survey() {
     const [form] = Form.useForm();
+
+    const surveyData = [
+        {
+            songData: {
+
+            },
+            questions: [
+                {
+                    responseType: 'text',
+                    label: 'What did the track make you think of?'
+                },
+                {
+                    responseType: 'number',
+                    label: 'How would you rate this track?'
+                }
+            ]
+        }
+    ]
+
     return (
         <>
-            <h1>Survey</h1>
+            <Title>Survey</Title>
 
-            <div style={{ width: '100%', maxWidth: '400px' }}>
+            <Space direction='vertical' align='center' size='large'>
+                <div style={{
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    marginBottom: '2rem'
+                }}>
+                    <AudioPlayer />
+                </div>
                 <Form
                     layout='vertical'
                     form={form}>
@@ -21,8 +51,7 @@ export default function Survey() {
                         <Button type="primary">Submit</Button>
                     </Form.Item>
                 </Form>
-
-            </div>
+            </Space>
         </>
     )
 }
