@@ -6,6 +6,7 @@ import {
     signOut
 } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore'
+import { getStorage } from 'firebase/storage';
 
 // Firebase configuration
 const app = initializeApp({
@@ -20,6 +21,7 @@ const app = initializeApp({
 
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 // Sign in
 const provider = new GoogleAuthProvider();
@@ -42,6 +44,7 @@ function logout() {
 export {
     auth,
     db,
+    storage,
     login,
     logout
 }
