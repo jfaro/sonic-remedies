@@ -16,9 +16,8 @@
 .app {
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  overflow-y: scroll;
+  padding: 0 2rem 2rem 2rem;
 }
 
 .page-content {
@@ -42,6 +41,10 @@
 .flex-col {
   display: flex;
   flex-direction: column;
+}
+
+.flex-grow {
+  flex: 1;
 }
 
 .flex-center {
@@ -69,7 +72,6 @@ header {
   justify-content: space-between;
   align-items: center;
   height: 100px;
-  padding: 0 4rem;
 }
 
 footer {
@@ -77,5 +79,4 @@ footer {
   justify-content: center;
   align-items: center;
   height: 100px;
-  padding: 0 4rem;
 }
