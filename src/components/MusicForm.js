@@ -1,35 +1,82 @@
-import { Form, Input, Button, InputNumber, TimePicker, Cascader, Radio } from "antd";
+/* eslint-disable default-case */
+import { Form, Input, Button, InputNumber, TimePicker, Cascader, Radio, Upload } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 import { useAuth } from "../contexts/AuthContext";
-import { getDatabase, ref, set } from "firebase/database";
+import { db } from '../services/firebase';
+import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 /**
  * This component, MusicForm, is used as part of the administrative half of the site.
  * It is used to submit new song samples into the database.
  */
 export default function MusicForm() {
-    const database = getDatabase();
+    const storage = getStorage();
     let fixedLength = "";
 
-    const onFinish = (values) => {
-        // Time added to database
+    const onFinish = async (values) => {
+        // Add time added to the values object
         let current = new Date();
-        let datetime = current.getFullYear() + '-'
+        values.timeAdded = current.getFullYear() + '-'
             + (current.getMonth() + 1) + '-'
             + current.getDate() + ' '
             + current.getHours() + ":"
             + current.getMinutes() + ":"
             + current.getSeconds();
-        values.timeAdded = datetime;
-        // User adding to database
+        // Add and cleanup the values object for better readability and usability
         values.admin = user.displayName;
-        // Cleanup and modification
         values.genre = values.genre.split(",").map(s => s.trim());
         values.length = fixedLength;
-        let file = values.filename.split('.')[0];
 
-        set(ref(database, 'pieces/' + file), { values });
+        // Upload song into Firebase Storage
+        values.filename = values.file.file.name;
+        const uploadTask = uploadBytesResumable(ref(storage, 'songs/' + values.filename), values.file.file);
+        uploadTask.on('state_changed',
+            (snapshot) => {
+                console.log("Uploading file!");
+            },
+            (error) => {
+                // A full list of error codes is available at
+                // https://firebase.google.com/docs/storage/web/handle-errors
+                switch (error.code) {
+                    case 'storage/unauthorized':
+                        console.log("User doesn't have permission to access Storage");
+                        break;
+                    case 'storage/canceled':
+                        console.log("User canceled upload");
+                        break;
+                    case 'storage/unknown':
+                        console.log("User encountered unknown error");
+                        break;
+                }
+            },
+            () => {
+                // Upload completed successfully, now we can get the download URL
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    console.log('File available at', downloadURL);
+                    values.url = downloadURL;
+                });
+            }
+        );
+        delete values.file;
 
-        console.log("Success:", values);
+        // Create a document ID of lowercase title with spaces replaced by -
+        let title = values.title.toLowerCase().replace(/ /g, "-").trim();
+        console.log(title);
+
+        try {
+            const docRef = doc(db, "songs", title);
+            await setDoc(docRef, values);
+            console.log("Document written with ID: ", docRef.id);
+            console.log("Success:", values);
+        } catch (e) {
+            console.error("Error adding document: ", e);
+            console.log("Failure:", values);
+
+            // Cancel upload to Storage if Firestore fails
+            uploadTask.cancel();
+
+        }
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -163,6 +210,13 @@ export default function MusicForm() {
         },
     ];
 
+    const uploadOptions = {
+        name: 'file',
+        onChange(info) {
+            console.log(info.file, info.fileList);
+        },
+    };
+
     const { user } = useAuth();
 
     return (
@@ -179,18 +233,20 @@ export default function MusicForm() {
             autoComplete="off"
             style={{ width: '50%', maxWidth: '35rem' }}
         >
+
             <Form.Item
-                label="File Name"
-                name="filename"
+                label="File Submission"
+                name="file"
                 rules={[
                     {
                         required: true,
-                        message: "Please give a valid file name!",
+                        message: "Please submit a file!",
                     },
                 ]}
             >
-                {/* TODO: This needs to be changed to a custom Upload component */}
-                <Input />
+                <Upload {...uploadOptions} beforeUpload={() => false} maxCount={1}>
+                    <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                </Upload>
             </Form.Item>
 
             <Form.Item
