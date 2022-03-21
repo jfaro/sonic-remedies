@@ -1,15 +1,17 @@
 import { Layout } from 'antd';
+import Footer from './Footer';
 import Header from './Header';
 
 export default function PageLayout({ children }) {
     return (
         <Layout className='app'>
-            <Layout className='page-content'>
+            <div className='page-content'>
                 <Header />
-                <Layout className='flex-col w-100 flex-center'>
+                <div className='flex-grow'>
                     {children}
-                </Layout>
-            </Layout>
+                </div>
+                <Footer />
+            </div>
         </Layout >
     )
 }

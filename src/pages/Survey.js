@@ -26,7 +26,7 @@ export default function Survey() {
     ]
 
     return (
-        <>
+        <div className="flex-col flex-center w-100 h-100">
             <Title>Survey</Title>
 
             <Space direction='vertical' align='center' size='large'>
@@ -52,6 +52,6 @@ export default function Survey() {
                     </Form.Item>
                 </Form>
             </Space>
-        </>
+        </div>
     )
 }

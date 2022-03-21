@@ -8,7 +8,7 @@ export default function Home() {
     const { user, isAdmin } = useAuth();
 
     return (
-        <>
+        <div className="flex-col flex-center w-100 h-100">
             <Title>Sonic Remedies</Title>
 
             <Space direction='vertical' align='center' size='large'>
@@ -19,6 +19,6 @@ export default function Home() {
                     <Button type="primary">Take the survey!</Button>
                 </Link>
             </Space>
-        </>
+        </div>
     )
 }
