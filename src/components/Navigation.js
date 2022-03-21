@@ -1,11 +1,13 @@
+import React from 'react';
 import { useState } from 'react';
 import { Button } from 'antd';
-import { Link, useLocation, matchPath, useMatch } from 'react-router-dom';
+import { Link, useMatch } from 'react-router-dom';
+import { logout } from '../services/firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 export default function Navigation() {
-    const { user, logout } = useAuth();
+    const { user, isAdmin } = useAuth();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const loginPathMatch = useMatch('/login');
@@ -24,15 +26,15 @@ export default function Navigation() {
     // Show login button if no user is logged in
     // Don't render login button if on login page
     // Show logout button if a user is logged in
-    let loginLogout = null;
+    let loginLogoutButton = null;
 
     if (!user && !loginPathMatch) {
-        loginLogout = (
+        loginLogoutButton = (
             <Link to='/login'>
                 <Button type='ghost'>Login</Button>
             </Link>);
     } else if (user) {
-        loginLogout = (
+        loginLogoutButton = (
             <Button
                 type='ghost'
                 onClick={handleLogout}
@@ -44,9 +46,17 @@ export default function Navigation() {
 
     return (
         <nav className='navigation'>
-            <Link to="/">Home</Link>
-            <Link to="/survey">Survey</Link>
-            {loginLogout}
+            <Link to="/">
+                <Button type='text'>Home</Button>
+            </Link>
+            <Link to="/survey">
+                <Button type='text'>Survey</Button>
+            </Link>
+            {loginLogoutButton}
+            {isAdmin ?
+                <Link to="/admin">
+                    <Button type='primary'>Admin Dashboard</Button>
+                </Link> : null}
         </nav>
     )
 }
