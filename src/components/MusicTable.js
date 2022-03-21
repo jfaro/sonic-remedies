@@ -46,7 +46,7 @@ export default function MusicTable() {
         {
             title: 'Album Title',
             dataIndex: 'album',
-            sorter: (a, b) => a.album.localeCompare(b.album), 
+            sorter: (a, b) => a.album.localeCompare(b.album),
         },
         {
             title: 'Genre',
@@ -90,21 +90,19 @@ export default function MusicTable() {
             key: "url"
         },
     ].filter(col => col.dataIndex !== 'url');
- 
+
     onSnapshot(songData, (snapshot) => {
         let songList = [];
         snapshot.forEach((doc) => {
             songList.push(doc.data());
         });
-        if(songList.length !== songs.length)
-        {
+        if (songList.length !== songs.length) {
             setSongs(songList);
         }
-        if (loading === true)
-        {
+        if (loading === true) {
             setLoading(false);
         }
-        console.log(songs);
+        // console.log(songs);
     });
 
     // Temporary function, remove later.
@@ -113,11 +111,11 @@ export default function MusicTable() {
     }
 
     return (
-        <Table 
-            columns={columns} 
-            dataSource={songs} 
+        <Table
+            columns={columns}
+            dataSource={songs}
             loading={loading}
-            onChange={onChange} 
+            onChange={onChange}
         />
     )
 }
