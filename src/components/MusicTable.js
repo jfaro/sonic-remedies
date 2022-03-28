@@ -1,7 +1,7 @@
+import { useState, useEffect } from 'react';
 import { Table } from 'antd';
-import { onSnapshot, query, collection, getFirestore } from "firebase/firestore";
-import { getDownloadURL, getStorage, ref } from 'firebase/storage';
-import { useState } from 'react';
+import { db } from '../services/firebase';
+import { collection, onSnapshot, query } from 'firebase/firestore';
 
 /**
  * This component, MusicTable, is used as part of the administrative half of the site.
@@ -15,27 +15,38 @@ import { useState } from 'react';
  * to have these work that doesn't rerender like 10 times? I don't know! Good luck!
  */
 export default function MusicTable() {
-    const database = getFirestore();
-    const storage = getStorage();
-    const songData = query(collection(database, "songs"));
     const [loading, setLoading] = useState(true);
     const [songs, setSongs] = useState([]);
 
+    // Get data on mount
+    useEffect(() => {
+        const songsList = [];
+        const songsQuery = query(collection(db, 'songs'));
+
+        const unsubscribe = onSnapshot(songsQuery, (snapshot) => {
+            snapshot.forEach((doc) => {
+                songsList.push({
+                    ...doc.data(),
+                    key: doc.id,
+                });
+            })
+            setSongs(songsList);
+            setLoading(false);
+        })
+
+        return () => unsubscribe();
+    }, [])
+
     const columns = [
         {
-            title: 'File Name',
-            dataIndex: 'filename',
-            defaultSortOrder: 'ascend',
-            sorter: (a, b) => a.filename.localeCompare(b.filename),
-            render: (filename, row) => <a href={row.url}>{filename}</a>
-        },
-        {
-            title: 'Track Title',
+            title: 'Title',
+            fixed: 'left',
             dataIndex: 'title',
             sorter: (a, b) => a.title.localeCompare(b.title),
+            render: (title, row) => <a href={row.url}>{title}</a>
         },
         {
-            title: 'Track Length',
+            title: 'Length',
             dataIndex: 'length',
         },
         {
@@ -44,45 +55,39 @@ export default function MusicTable() {
             sorter: (a, b) => a.artist.localeCompare(b.artist),
         },
         {
-            title: 'Album Title',
+            title: 'Album',
             dataIndex: 'album',
             sorter: (a, b) => a.album.localeCompare(b.album),
         },
         {
             title: 'Genre',
             dataIndex: 'genre',
-            // filter?
         },
         {
-            title: 'Track Tempo',
+            title: 'Tempo',
             dataIndex: 'tempo',
             sorter: (a, b) => a.tempo - b.tempo,
         },
         {
-            title: 'Key and Mode',
-            dataIndex: 'key',
-            // filter
+            title: 'Key / Mode',
+            dataIndex: 'key'
         },
         {
             title: 'Texture',
-            dataIndex: 'texture',
-            // filter
+            dataIndex: 'texture'
         },
         {
             title: 'Improvisation',
-            dataIndex: 'improv',
-            // filter
+            dataIndex: 'improv'
         },
         {
             title: 'Added By',
-            dataIndex: 'admin',
-            // filter
+            dataIndex: 'admin'
         },
         {
             title: 'Date Added',
             dataIndex: 'timeAdded',
             sorter: (a, b) => a.tempo - b.tempo,
-            // filter
         },
         {
             title: "Download Link",
@@ -90,20 +95,6 @@ export default function MusicTable() {
             key: "url"
         },
     ].filter(col => col.dataIndex !== 'url');
-
-    onSnapshot(songData, (snapshot) => {
-        let songList = [];
-        snapshot.forEach((doc) => {
-            songList.push(doc.data());
-        });
-        if (songList.length !== songs.length) {
-            setSongs(songList);
-        }
-        if (loading === true) {
-            setLoading(false);
-        }
-        // console.log(songs);
-    });
 
     // Temporary function, remove later.
     function onChange(pagination, filters, sorter, extra) {
@@ -116,6 +107,9 @@ export default function MusicTable() {
             dataSource={songs}
             loading={loading}
             onChange={onChange}
+            pagination={false}
+            size='small'
+            scroll={{ y: 240, x: 1600 }}
         />
     )
 }

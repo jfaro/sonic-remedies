@@ -1,16 +1,17 @@
 import { Layout } from 'antd';
-import Footer from './Footer';
 import Header from './Header';
+import PagePathViewer from './PagePathViewer';
 
 export default function PageLayout({ children }) {
+
     return (
         <Layout className='app'>
             <div className='page-content'>
                 <Header />
-                <div className='flex-grow'>
+                <PagePathViewer />
+                <div className='page-center'>
                     {children}
                 </div>
-                <Footer />
             </div>
         </Layout >
     )
