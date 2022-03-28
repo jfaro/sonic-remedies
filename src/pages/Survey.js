@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Input, Button, Space, Typography } from 'antd';
 import AudioPlayer from '../components/AudioPlayer';
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 export default function Survey() {
     const [form] = Form.useForm();

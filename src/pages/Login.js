@@ -16,7 +16,7 @@ export default function Login() {
     useEffect(() => {
         setIsMounted(true);
         return () => { setIsMounted(false) }
-    })
+    }, [])
 
     async function handleLogin() {
         setLoading(true);
@@ -30,7 +30,7 @@ export default function Login() {
     }
 
     return (
-        <>
+        <div className='flex-col flex-center w-100 h-100'>
             {user && <Navigate to='/' replace={true} />}
             <Title>Login</Title>
 
@@ -44,6 +44,6 @@ export default function Login() {
                     Sign in with Google
                 </Button>
             </Space>
-        </>
+        </div>
     )
 }
