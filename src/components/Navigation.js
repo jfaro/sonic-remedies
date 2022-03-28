@@ -1,13 +1,11 @@
-import React from 'react';
 import { useState } from 'react';
 import { Button } from 'antd';
-import { Link, useMatch } from 'react-router-dom';
-import { logout } from '../services/firebase';
-import { useAuth } from '../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { Link, useMatch, useNavigate } from 'react-router-dom';
+import { useAuth } from '../services/firebase';
+import { getAuth, signOut } from 'firebase/auth';
 
 export default function Navigation() {
-    const { user, isAdmin } = useAuth();
+    const { user, isAuthenticated } = useAuth();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const loginPathMatch = useMatch('/login');
@@ -15,12 +13,13 @@ export default function Navigation() {
     async function handleLogout() {
         setLoading(true);
         try {
-            await logout();
-        } catch {
-            // TODO: Handle failed login...
+            await signOut(getAuth());
+            console.log("Sign-out successful.")
+        } catch (error) {
+            console.log("An error happened.")
         }
-        navigate('/');
         setLoading(false);
+        navigate('/');
     }
 
     // Show login button if no user is logged in
@@ -53,7 +52,7 @@ export default function Navigation() {
                 <Button type='text'>Survey</Button>
             </Link>
             {loginLogoutButton}
-            {isAdmin ?
+            {isAuthenticated ?
                 <Link to="/admin">
                     <Button type='primary'>Admin Dashboard</Button>
                 </Link> : null}

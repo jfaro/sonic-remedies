@@ -16,7 +16,7 @@ import {
 import { addToSongsCollection } from "../services/firestore";
 import { uploadSong } from '../services/storage';
 import { UploadOutlined } from "@ant-design/icons";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from '../services/firebase';
 import { keyOptions } from "../constants/keyOptions";
 
 export default function UploadTrack() {

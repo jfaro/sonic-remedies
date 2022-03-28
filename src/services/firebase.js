@@ -1,10 +1,6 @@
+import { createContext, useContext, useEffect, useState } from 'react';
 import { initializeApp } from 'firebase/app';
-import {
-    getAuth,
-    GoogleAuthProvider,
-    signInWithPopup,
-    signOut
-} from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage';
 
@@ -20,31 +16,30 @@ const app = initializeApp({
 });
 
 const auth = getAuth(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
+export const db = getFirestore(app);
+export const storage = getStorage(app);
 
-// Sign in
-const provider = new GoogleAuthProvider();
+// Create context
+const AuthContext = createContext();
 
-// Sign in with Google - returns a promise
-function login() {
-    return signInWithPopup(auth, provider)
-        .then(res => { console.log('Sign in with Google succeeded.'); })
-        .catch(error => { console.log('Sign in with Google failed.', error.message); })
+export const AuthContextProvider = props => {
+    const [user, setUser] = useState();
+    const [error, setError] = useState();
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, setUser, setError);
+        return () => unsubscribe();
+    }, []);
+
+    const value = {
+        user: user,
+        error: error,
+        isAuthenticated: user != null
+    }
+
+    return <AuthContext.Provider value={value} {...props} />
 }
 
-// Sign out - returns a promise with success/fail status
-function logout() {
-    return signOut(auth)
-        .then(() => { console.log("Sign-out successful.") })
-        .catch(error => { console.log("An error happened.") })
-}
-
-// Exports
-export {
-    auth,
-    db,
-    storage,
-    login,
-    logout
+export const useAuth = () => {
+    return useContext(AuthContext);
 }
