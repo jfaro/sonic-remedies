@@ -1,11 +1,6 @@
 import { db } from './firebase';
 import { doc, setDoc } from "firebase/firestore";
 
-// Get all surveys
-function getAllSurveys() {
-    // TODO
-}
-
 
 // Create a new document in /songs collections
 // Returns true on success, false on failure
@@ -25,6 +20,5 @@ const addToSongsCollection = async (songDocumentValues) => {
 }
 
 export {
-    getAllSurveys,
     addToSongsCollection
 };
