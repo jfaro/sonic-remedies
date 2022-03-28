@@ -1,5 +1,5 @@
-import { collection, getDocs, query } from 'firebase/firestore';
-import React, { useContext, useEffect, useState } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { auth, db } from '../services/firebase';
 
 // Create context
@@ -16,17 +16,7 @@ export function AuthProvider({ children }) {
     const [isAdmin, setIsAdmin] = useState(false);
     const [loading, setLoading] = useState(true);
 
-    // Detect active user changes
-    useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(user => {
-            setUser(user);
-            setAdminStatus(user);
-            setLoading(false);
-        })
-        return unsubscribe;   // Unsubscribe listener on unmount
-    }, [])
-
-    async function setAdminStatus(user) {
+    const setAdminStatus = useCallback(async (user) => {
         if (!user) {
             setIsAdmin(false);
             return;
@@ -37,13 +27,24 @@ export function AuthProvider({ children }) {
         querySnapshot.forEach(doc => {
 
             // users => admin => uids
-            if (doc.id == 'admin') {
+            if (doc.id === 'admin') {
                 const adminData = doc.data();
                 setIsAdmin(adminData && adminData.uids.includes(user.uid))
             }
         })
         console.log("admin status:", isAdmin)
-    }
+    }, [isAdmin])
+
+
+    // Detect active user changes
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged(user => {
+            setUser(user);
+            setAdminStatus(user);
+            setLoading(false);
+        })
+        return unsubscribe;   // Unsubscribe listener on unmount
+    }, [setAdminStatus])
 
     // Data exposed by context 
     const value = { user, isAdmin }

@@ -7,24 +7,6 @@ const { Title } = Typography;
 export default function Survey() {
     const [form] = Form.useForm();
 
-    const surveyData = [
-        {
-            songData: {
-
-            },
-            questions: [
-                {
-                    responseType: 'text',
-                    label: 'What did the track make you think of?'
-                },
-                {
-                    responseType: 'number',
-                    label: 'How would you rate this track?'
-                }
-            ]
-        }
-    ]
-
     return (
         <div className="flex-col flex-center w-100 h-100">
             <Title>Survey</Title>
