@@ -41,8 +41,8 @@ export function AuthProvider({ children }) {
                 const adminData = doc.data();
                 setIsAdmin(adminData && adminData.uids.includes(user.uid))
             }
-            console.log("admin status:", isAdmin)
         })
+        console.log("admin status:", isAdmin)
     }
 
     // Data exposed by context 
