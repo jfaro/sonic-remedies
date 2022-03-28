@@ -4,43 +4,48 @@ import {
   Route
 } from 'react-router-dom';
 
-import PrivateRoute from './components/PrivateRoute';
-import PageLayout from './components/PageLayout';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthenticatedRoute, UnauthenticatedRoute } from './components/Routes';
+import { AuthContextProvider } from './services/firebase';
 
+import PageLayout from './components/PageLayout';
 import Home from './pages/Home';
 import Survey from './pages/Survey';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
 
-
 function App() {
   return (
-    <Router>
-      <AuthProvider>
+    <AuthContextProvider>
+      <Router>
         <PageLayout>
           <Routes>
-            {/* Public routes */}
+
+            {/* Home */}
             <Route path='/' element={<Home />} />
-            <Route path='/login' element={<Login />} />
+
+            {/* Unauthenticated routes */}
+            <Route path='/login' element={
+              <UnauthenticatedRoute>
+                <Login />
+              </UnauthenticatedRoute>
+            } />
 
             {/* Authenticated routes */}
             <Route path='/survey' element={
-              <PrivateRoute>
+              <AuthenticatedRoute>
                 <Survey />
-              </PrivateRoute>
+              </AuthenticatedRoute>
+            } />
+            <Route path='/admin' element={
+              <AuthenticatedRoute>
+                <Admin />
+              </AuthenticatedRoute>
             } />
 
-            {/* Admin routes */}
-            <Route path='/admin' element={
-              <PrivateRoute>
-                <Admin />
-              </PrivateRoute>
-            } />
           </Routes>
         </PageLayout>
-      </AuthProvider>
-    </Router>
+      </Router>
+    </AuthContextProvider>
   );
 }
 
