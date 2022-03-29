@@ -1,35 +1,49 @@
 import { useState, useEffect } from 'react';
-import { Table } from 'antd';
+import { Table, Tag } from 'antd';
 import { db } from '../services/firebase';
 import { collection, onSnapshot, query } from 'firebase/firestore';
 
 /**
  * This component, MusicTable, is used as part of the administrative half of the site.
  * It is used to display the song database to the administrator.
- * TODOs:
- *    - Add filtering to the table
- * 
- * ANDREW NOTE:
- * Hello future programmers! Yes, I know my use of React state here is atrocious, 
- * especially when combined with the Firestore onSnapshot() function. Is there a better way
- * to have these work that doesn't rerender like 10 times? I don't know! Good luck!
  */
 export default function MusicTable() {
     const [loading, setLoading] = useState(true);
     const [songs, setSongs] = useState([]);
+    const [admins, setAdmins] = useState([]);
 
     // Get data on mount
     useEffect(() => {
         const songsList = [];
+        const adminList = [];
         const songsQuery = query(collection(db, 'songs'));
 
         const unsubscribe = onSnapshot(songsQuery, (snapshot) => {
             snapshot.forEach((doc) => {
+                // Song List
                 songsList.push({
                     ...doc.data(),
-                    key: doc.id,
+                    id: doc.id,
+                    key_signature: doc.data().key_signature[0] + " " + doc.data().key_signature[1],
                 });
-            })
+
+                // Admin filtering
+                const ad = doc.data().admin;
+                if(adminList.indexOf(ad) === -1)
+                {
+                    adminList.push(ad);
+                }
+            });
+
+            const tempAdmin = [];
+            adminList.forEach((admin) => {
+                tempAdmin.push({
+                    text: admin,
+                    value: admin, 
+                });
+            });
+
+            setAdmins(tempAdmin);
             setSongs(songsList);
             setLoading(false);
         })
@@ -62,6 +76,17 @@ export default function MusicTable() {
         {
             title: 'Genre',
             dataIndex: 'genre',
+            render: tags => (
+                <>
+                  {tags.map(tag => {
+                    return (
+                      <Tag color={'geekblue'} key={tag}>
+                        {tag}
+                      </Tag>
+                    );
+                  })}
+                </>
+              ),
         },
         {
             title: 'Tempo',
@@ -70,7 +95,7 @@ export default function MusicTable() {
         },
         {
             title: 'Key / Mode',
-            dataIndex: 'key'
+            dataIndex: 'key_signature'
         },
         {
             title: 'Texture',
@@ -82,7 +107,9 @@ export default function MusicTable() {
         },
         {
             title: 'Added By',
-            dataIndex: 'admin'
+            dataIndex: 'admin',
+            filters: admins,
+            onFilter: (value, record) => record.admin.indexOf(value) === 0,
         },
         {
             title: 'Date Added',

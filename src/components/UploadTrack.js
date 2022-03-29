@@ -54,7 +54,7 @@ export default function UploadTrack() {
                     admin: user.displayName,
                     genre: formValues.genre.split(",").map(s => s.trim()),
                     length: trackLength,
-                    timeAdded: current.toISOString(),
+                    timeAdded: current.toLocaleDateString("en-US",dateOptions),
                     filename: filename,
                     url: downloadURL
                 }
@@ -72,6 +72,15 @@ export default function UploadTrack() {
             .catch((error) => {
                 console.log("Form validation error:", error)
             })
+    }
+
+    const dateOptions = {
+        year: "2-digit",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
     }
 
     const handleCancel = () => {
@@ -194,7 +203,7 @@ export default function UploadTrack() {
                         <Col span={12}>
                             <Form.Item
                                 label="Key and Mode"
-                                name="key"
+                                name="key_signature"
                                 rules={[{ required: true, message: "Please give the track's key and mode!" }]}>
                                 <Cascader options={keyOptions} placeholder="Please select" />
                             </Form.Item>

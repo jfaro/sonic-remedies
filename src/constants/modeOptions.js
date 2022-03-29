@@ -1,34 +1,34 @@
 export const modeOptions = [
         {
-                value: 'major',
+                value: 'Major',
                 label: 'Major'
         },
         {
-                value: 'minor',
+                value: 'Minor',
                 label: 'Minor'
         },
         {
-                value: 'dorian',
+                value: 'Dorian',
                 label: 'Dorian'
         },
         {
-                value: 'phrygian',
+                value: 'Phrygian',
                 label: 'Phrygian'
         },
         {
-                value: 'lydian',
+                value: 'Lydian',
                 label: 'Lydian'
         },
         {
-                value: 'mixolydian',
+                value: 'Mixolydian',
                 label: 'Mixolydian'
         },
         {
-                value: 'aeolian',
+                value: 'Aeolian',
                 label: 'Aeolian'
         },
         {
-                value: 'locrian',
+                value: 'Locrian',
                 label: 'Locrian'
         },
 ];
