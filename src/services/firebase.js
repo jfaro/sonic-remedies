@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore'
+import { doc, getDoc, getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage';
 
 // Firebase configuration
@@ -24,16 +24,38 @@ const AuthContext = createContext();
 
 export const AuthContextProvider = props => {
     const [user, setUser] = useState();
+    const [isAdmin, setIsAdmin] = useState(false);
     const [error, setError] = useState();
+
+    useEffect(() => {
+        const setAdminStatus = async () => {
+            setIsAdmin(false);
+            if (!user) return;
+
+            try {
+                const docSnap = await getDoc(doc(db, 'users', user.uid));
+                console.log("doc exists?: ", docSnap.exists());
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    setIsAdmin(data.admin);
+                }
+            } catch (error) {
+                console.log("Error accessing users collection.")
+            }
+        }
+        setAdminStatus();
+    }, [user])
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, setUser, setError);
         return () => unsubscribe();
     }, []);
 
+
     const value = {
         user: user,
         error: error,
+        isAdmin: isAdmin,
         isAuthenticated: user != null
     }
 

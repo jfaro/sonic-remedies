@@ -5,7 +5,7 @@ import { useAuth } from '../services/firebase';
 import { getAuth, signOut } from 'firebase/auth';
 
 export default function Navigation() {
-    const { user, isAuthenticated } = useAuth();
+    const { user, isAuthenticated, isAdmin } = useAuth();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const loginPathMatch = useMatch('/login');
@@ -52,7 +52,7 @@ export default function Navigation() {
                 <Button type='text'>Survey</Button>
             </Link>
             {loginLogoutButton}
-            {isAuthenticated ?
+            {isAuthenticated && isAdmin ?
                 <Link to="/admin">
                     <Button type='primary'>Admin Dashboard</Button>
                 </Link> : null}
