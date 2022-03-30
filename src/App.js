@@ -41,7 +41,6 @@ function App() {
                 <Admin />
               </AuthenticatedRoute>
             } />
-
           </Routes>
         </PageLayout>
       </Router>
