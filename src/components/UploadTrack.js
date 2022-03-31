@@ -4,7 +4,6 @@ import {
     Input,
     Button,
     InputNumber,
-    TimePicker,
     Cascader,
     Modal,
     Radio,
@@ -22,7 +21,6 @@ import { keyOptions } from "../constants/keyOptions";
 export default function UploadTrack() {
     const [form] = Form.useForm();
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [trackLength, setTrackLength] = useState("");
     const [isUploading, setIsUploading] = useState(false);
 
     const { user } = useAuth();
@@ -53,9 +51,10 @@ export default function UploadTrack() {
                 const formattedValues = {
                     admin: user.displayName,
                     genre: formValues.genre.split(",").map(s => s.trim()),
-                    length: trackLength,
-                    timeAdded: current.toLocaleDateString("en-US",dateOptions),
+                    timeAdded: current.toISOString(),
                     filename: filename,
+                    improv: formValues.improv === "y",
+                    texture: formValues.texture === "y",
                     url: downloadURL
                 }
                 Object.assign(songDocument, formattedValues);
@@ -72,15 +71,6 @@ export default function UploadTrack() {
             .catch((error) => {
                 console.log("Form validation error:", error)
             })
-    }
-
-    const dateOptions = {
-        year: "2-digit",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
     }
 
     const handleCancel = () => {
@@ -181,15 +171,10 @@ export default function UploadTrack() {
                     <Row gutter={formGutter}>
                         <Col span={6}>
                             <Form.Item
-                                label="Track Length"
+                                label="Track Length (in seconds)"
                                 name="length"
-                                rules={[{ required: true, message: "Please give the track's length!" }]}
-                            >
-                                <TimePicker
-                                    format={'HH:mm'}
-                                    showNow={false}
-                                    onChange={(time, timeString) => setTrackLength(timeString)}
-                                    style={{ width: '100%' }} />
+                                rules={[{ required: true, message: "Please give the track's length!" }]}>
+                                <InputNumber style={{ width: '100%' }} />
                             </Form.Item>
                         </Col>
                         <Col span={6}>
@@ -236,12 +221,6 @@ export default function UploadTrack() {
                             </Form.Item>
                         </Col>
                     </Row>
-                    {/* 
-            <Form.Item>
-                <Button type="primary" htmlType="submit">
-                    Submit
-                </Button>
-            </Form.Item> */}
                 </Form >
             </Modal>
         </>

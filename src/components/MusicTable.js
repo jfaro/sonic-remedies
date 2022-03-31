@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Table, Tag } from 'antd';
+import { Table, Tag, Space, Button } from 'antd';
 import { db } from '../services/firebase';
 import { collection, onSnapshot, query } from 'firebase/firestore';
+import { CheckCircleTwoTone, CloseCircleTwoTone, RedoOutlined } from '@ant-design/icons'
+import moment from 'moment';
+import UploadTrack from './UploadTrack';
 
 /**
  * This component, MusicTable, is used as part of the administrative half of the site.
@@ -25,6 +28,8 @@ export default function MusicTable() {
                     ...doc.data(),
                     id: doc.id,
                     key_signature: doc.data().key_signature[0] + " " + doc.data().key_signature[1],
+                    timeAdded: moment(doc.data().timeAdded, moment.ISO_8601).format("M/D/YYYY, h:mm:ss a"),
+                    length: secondsToTime(doc.data().length)
                 });
 
                 // Admin filtering
@@ -49,7 +54,28 @@ export default function MusicTable() {
         })
 
         return () => unsubscribe();
-    }, [])
+    }, [loading]);
+
+    function Checkmark(props)
+    {
+        if (props.isTrue) {
+            return <CheckCircleTwoTone twoToneColor="#52c41a"/>
+        } else {
+            return <CloseCircleTwoTone twoToneColor="#f5222d"/>
+        }
+    }
+
+    function secondsToTime(sec){
+        if(typeof sec !== 'number')
+        {
+            return "-";
+        }
+
+        var m = Math.floor(sec / 60).toString().padStart(2,'0'),
+            s = Math.floor(sec % 60).toString().padStart(2,'0');
+        
+        return m + ':' + s;
+    }
 
     const columns = [
         {
@@ -62,6 +88,7 @@ export default function MusicTable() {
         {
             title: 'Length',
             dataIndex: 'length',
+            sorter: (a, b) => a.length.localeCompare(b.length),
         },
         {
             title: 'Artist',
@@ -98,12 +125,14 @@ export default function MusicTable() {
             dataIndex: 'key_signature'
         },
         {
-            title: 'Texture',
-            dataIndex: 'texture'
+            title: 'Consistent Texture',
+            dataIndex: 'texture',
+            render: value => (<Checkmark isTrue={value}></Checkmark>)
         },
         {
             title: 'Improvisation',
-            dataIndex: 'improv'
+            dataIndex: 'improv',
+            render: value => (<Checkmark isTrue={value}></Checkmark>)
         },
         {
             title: 'Added By',
@@ -114,7 +143,7 @@ export default function MusicTable() {
         {
             title: 'Date Added',
             dataIndex: 'timeAdded',
-            sorter: (a, b) => a.tempo - b.tempo,
+            sorter: (a, b) => a.timeAdded.localeCompare(b.timeAdded),
         },
         {
             title: "Download Link",
@@ -129,14 +158,23 @@ export default function MusicTable() {
     }
 
     return (
-        <Table
-            columns={columns}
-            dataSource={songs}
-            loading={loading}
-            onChange={onChange}
-            pagination={false}
-            size='small'
-            scroll={{ y: 240, x: 1600 }}
-        />
+        <div>
+            <Space size="middle">
+                <UploadTrack />
+                <Button onClick={() => setLoading(true)}>Reload Table</Button>
+            </Space>
+            <p></p>
+            <Table
+                columns={columns}
+                dataSource={songs}
+                loading={loading}
+                onChange={onChange}
+                pagination={false}
+                rowKey='id'
+                size='small'
+                scroll={{ y: 240, x: 1600 }}
+            />
+        </div>
+        
     )
 }

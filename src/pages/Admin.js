@@ -1,6 +1,5 @@
 import { Divider, Space, Typography } from "antd"
 import MusicTable from "../components/MusicTable";
-import UploadTrack from "../components/UploadTrack";
 import Surveys from '../components/Surveys';
 import CreateSurvey from "../components/CreateSurvey";
 
@@ -20,10 +19,7 @@ export default function Admin() {
             <Divider />
 
             <Title level={3}>Uploaded Tracks</Title>
-            <Space direction='vertical' size='large'>
-                <UploadTrack />
-                <MusicTable />
-            </Space>
+            <MusicTable />
         </div>
     )
 }
