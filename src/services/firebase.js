@@ -34,7 +34,6 @@ export const AuthContextProvider = props => {
 
             try {
                 const docSnap = await getDoc(doc(db, 'users', user.uid));
-                console.log("doc exists?: ", docSnap.exists());
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     setIsAdmin(data.admin);
