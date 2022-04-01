@@ -15,19 +15,19 @@ import {
 import { useAuth } from '../services/firebase';
 
 const { Option } = Select;
-const { Text, Title } = Typography;
+const { Title } = Typography;
 
-const Question = ({ prompt, type }) => {
+const Question = ({ idx, prompt, type, removeQuestion }) => {
     return (
         <Row gutter={24} style={{ width: '100%' }}>
-            <Col flex='auto'>
+            <Col span={12}>
                 {prompt}
             </Col>
-            <Col span={6}>
+            <Col flex='auto'>
                 {type}
             </Col>
             <Col>
-                <Button danger>Remove</Button>
+                <Button danger onClick={() => removeQuestion(idx)}>Remove</Button>
             </Col>
         </Row>
     )
@@ -38,32 +38,15 @@ export default function CreateSurvey() {
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [questions, setQuestions] = useState([]);
 
     const [surveyForm] = Form.useForm();
     const [addQuestionForm] = Form.useForm();
-    const [questions, setQuestions] = useState([
-        {
-            prompt: 'What is your name',
-            type: 'text'
-        },
-        {
-            prompt: 'How old are you',
-            type: 'text'
-        },
-        {
-            prompt: 'What is your name',
-            type: 'text'
-        },
-        {
-            prompt: 'How old are you',
-            type: 'text'
-        }
-    ]);
 
     // Create new survey
     const handleSubmit = async () => {
-
         try {
+            // Format new survey data
             const formValues = await surveyForm.validateFields();
             const survey = {
                 title: formValues.title,
@@ -71,16 +54,57 @@ export default function CreateSurvey() {
                 createdBy: user.displayName
             }
 
+            // Add survey in Firestore /surveys collection
             console.log("Survey:", survey)
+
+            // Cleanup
             setIsLoading(false);
+            resetModal();
             setIsModalVisible(false);
         } catch (error) {
             console.log("Error submitting form:", error);
         }
     }
 
+    // Cancel creation of new survey
     const handleCancel = () => {
+        resetModal();
         setIsModalVisible(false);
+    }
+
+    // Add a new question to the survey
+    const addQuestion = async () => {
+        try {
+            // Create new question
+            const questionValues = await addQuestionForm.validateFields();
+            questionValues.idx = questions.length;
+
+            // Add new question to questions array
+            const updatedQuestions = [...questions, questionValues];
+            setQuestions(updatedQuestions);
+
+            // Reset form
+            addQuestionForm.resetFields();
+        } catch (error) {
+            console.log("Error adding question:", error);
+        }
+    }
+
+    // Remove a question from the survey
+    const removeQuestion = (questionIdx) => {
+        const updatedQuestions = questions.filter(q => q.idx !== questionIdx);
+
+        // Update question indices
+        updatedQuestions.forEach((question, idx) => {
+            question.idx = idx
+        })
+        setQuestions(updatedQuestions);
+    }
+
+    const resetModal = () => {
+        surveyForm.resetFields();
+        addQuestionForm.resetFields();
+        setQuestions([]);
     }
 
     return (
@@ -112,42 +136,46 @@ export default function CreateSurvey() {
 
                 {/* Render all questions */}
                 <Title level={5}>Questions</Title>
-                <div style={{
-                    maxHeight: 160,
-                    overflow: 'auto',
-                    padding: '0 16px',
-                    marginBottom: '16px',
-                    borderRadius: '2px',
-                    border: '1px solid rgba(140, 140, 140, 0.35'
-                }}>
-                    <List
-                        dataSource={questions}
-                        renderItem={question => (
-                            <List.Item>
-                                <Question
-                                    prompt={question.prompt}
-                                    questionType={question.type} />
-                            </List.Item>
-                        )}
-                    />
-                </div>
+                <List
+                    dataSource={questions}
+                    renderItem={({ idx, prompt, type }) => (
+                        <List.Item>
+                            <Question
+                                idx={idx}
+                                prompt={prompt}
+                                type={type}
+                                removeQuestion={removeQuestion} />
+                        </List.Item>
+                    )}
+                />
+
+                <Divider />
 
                 {/* Add a question to the survey */}
                 <Title level={5}>Add a question</Title>
-                <Form layout='vertical' form={addQuestionForm}>
-                    <Row gutter={24}>
-                        <Col flex='auto'>
-                            <Input placeholder="Enter a prompt" />
+                <Form
+                    layout='vertical'
+                    form={addQuestionForm}
+                    initialValues={{ type: 'text' }}>
+                    <Row gutter={24} align='bottom'>
+                        <Col span={12}>
+                            <Form.Item name='prompt' label="Prompt">
+                                <Input placeholder="Enter a prompt" />
+                            </Form.Item>
                         </Col>
-                        <Col span={6}>
-                            <Select style={{ width: '100%' }}>
-                                <Option value='text'>Text</Option>
-                                <Option value='color'>Color</Option>
-                                <Option value='bool'>Yes / No</Option>
-                            </Select>
+                        <Col flex='auto'>
+                            <Form.Item name='type' label='Response type'>
+                                <Select style={{ width: '100%' }}>
+                                    <Option value='text'>Text</Option>
+                                    <Option value='color'>Color</Option>
+                                    <Option value='bool'>Yes / No</Option>
+                                </Select>
+                            </Form.Item>
                         </Col>
                         <Col>
-                            <Button type='secondary'>Add question</Button>
+                            <Form.Item>
+                                <Button type='secondary' onClick={addQuestion}>Add question</Button>
+                            </Form.Item>
                         </Col>
                     </Row>
                 </Form>
