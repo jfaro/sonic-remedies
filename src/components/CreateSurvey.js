@@ -101,8 +101,9 @@ export default function CreateSurvey() {
                 width={800}>
 
                 {/* Set the survey's title */}
+                <Title level={5}>Survey title</Title>
                 <Form layout='vertical' form={surveyForm}>
-                    <Form.Item label='Survey Title' name='title'>
+                    <Form.Item name='title'>
                         <Input placeholder="Enter a title for this survey" />
                     </Form.Item>
                 </Form>
@@ -111,9 +112,8 @@ export default function CreateSurvey() {
 
                 {/* Render all questions */}
                 <Title level={5}>Questions</Title>
-
                 <div style={{
-                    maxHeight: 200,
+                    maxHeight: 160,
                     overflow: 'auto',
                     padding: '0 16px',
                     marginBottom: '16px',
@@ -133,6 +133,7 @@ export default function CreateSurvey() {
                 </div>
 
                 {/* Add a question to the survey */}
+                <Title level={5}>Add a question</Title>
                 <Form layout='vertical' form={addQuestionForm}>
                     <Row gutter={24}>
                         <Col flex='auto'>
