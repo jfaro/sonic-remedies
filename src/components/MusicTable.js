@@ -5,6 +5,7 @@ import { collection, onSnapshot, query } from 'firebase/firestore';
 import { CheckCircleTwoTone, CloseCircleTwoTone, RedoOutlined } from '@ant-design/icons'
 import moment from 'moment';
 import UploadTrack from './UploadTrack';
+import AudioPlayer from './AudioPlayer';
 
 /**
  * This component, MusicTable, is used as part of the administrative half of the site.
@@ -14,6 +15,7 @@ export default function MusicTable() {
     const [loading, setLoading] = useState(true);
     const [songs, setSongs] = useState([]);
     const [admins, setAdmins] = useState([]);
+    const [playing, setPlaying] = useState([]);
 
     // Get data on mount
     useEffect(() => {
@@ -62,6 +64,15 @@ export default function MusicTable() {
             return <CheckCircleTwoTone twoToneColor="#52c41a"/>
         } else {
             return <CloseCircleTwoTone twoToneColor="#f5222d"/>
+        }
+    }
+
+    function ChartPlayer()
+    {
+        if (playing.length === 3) {
+            return <AudioPlayer song={playing[0]} artist={playing[1]} url={playing[2]} orientation={'row'}></AudioPlayer>
+        } else {
+            return null;
         }
     }
 
@@ -146,6 +157,16 @@ export default function MusicTable() {
             sorter: (a, b) => a.timeAdded.localeCompare(b.timeAdded),
         },
         {
+            title: 'Actions',
+            key: 'action',
+            render: (text, record) => (
+              <Space size="middle">
+                <a onClick={() => setPlaying([record.title,record.artist,record.url]) }>Play Song</a>
+                <a>Delete</a>
+              </Space>
+            ),
+        },
+        {
             title: "Download Link",
             dataIndex: "url",
             key: "url"
@@ -162,6 +183,7 @@ export default function MusicTable() {
             <Space size="middle">
                 <UploadTrack />
                 <Button onClick={() => setLoading(true)}>Reload Table</Button>
+                <ChartPlayer></ChartPlayer>
             </Space>
             <p></p>
             <Table

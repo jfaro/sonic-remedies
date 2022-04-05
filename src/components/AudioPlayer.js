@@ -2,14 +2,13 @@ import React from 'react';
 import { Button } from 'antd';
 import { PlayCircleOutlined, PauseOutlined } from '@ant-design/icons';
 import useAudio from '../hooks/useAudio';
-import song from '../audio/so-so-lovely.mp3';
 
-export default function AudioPlayer() {
-    const [playing, toggle] = useAudio(song);
+export default function AudioPlayer({song, artist, url, orientation}) {
+    const [playing, toggle] = useAudio(new URL(url));
 
     const track = {
-        title: 'So So Lovely',
-        artist: 'Shigeto',
+        title: song,
+        artist: artist,
     }
 
     return (
@@ -18,8 +17,9 @@ export default function AudioPlayer() {
             style={{
                 width: '100%',
                 display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center'
+                flexDirection: orientation,
+                alignItems: 'center',
+                gap: 10,
             }}>
             <h2>{track.title}</h2>
             <h3>{track.artist}</h3>
