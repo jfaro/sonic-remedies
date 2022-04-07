@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { Table, Tag, Space, Button } from 'antd';
 import { db } from '../services/firebase';
 import { collection, onSnapshot, query } from 'firebase/firestore';
-import { CheckCircleTwoTone, CloseCircleTwoTone, RedoOutlined } from '@ant-design/icons'
+import { CheckCircleTwoTone, CloseCircleTwoTone } from '@ant-design/icons'
+import { deleteData } from '../services/delete';
 import moment from 'moment';
 import UploadTrack from './UploadTrack';
 import AudioPlayer from './AudioPlayer';
@@ -58,6 +59,11 @@ export default function MusicTable() {
         return () => unsubscribe();
     }, [loading]);
 
+    /**
+     * Returns a tag for a green check or red X for the texture and improv columns
+     * @param {Boolean} props with one value, .isTrue
+     * @returns {Tag} of AntDesign two-tone icons CheckCircle or CloseCircle
+     */ 
     function Checkmark(props)
     {
         if (props.isTrue) {
@@ -67,15 +73,24 @@ export default function MusicTable() {
         }
     }
 
+    /**
+     * Hides the audio player until "Play Song" is clicked
+     * @returns {AudioPlayer} if the length of the playing data array is non-zero, else null
+     */
     function ChartPlayer()
     {
-        if (playing.length === 3) {
+        if (playing.length !== 0) {
             return <AudioPlayer song={playing[0]} artist={playing[1]} url={playing[2]} orientation={'row'}></AudioPlayer>
         } else {
             return null;
         }
     }
 
+    /**
+     * Converts between total seconds of a song's length into a mm:ss format
+     * @param {Integer} sec 
+     * @returns {string} of human formatted minutes:seconds format
+     */
     function secondsToTime(sec){
         if(typeof sec !== 'number')
         {
@@ -162,7 +177,7 @@ export default function MusicTable() {
             render: (text, record) => (
               <Space size="middle">
                 <a onClick={() => setPlaying([record.title,record.artist,record.url]) }>Play Song</a>
-                <a>Delete</a>
+                <a onClick={() => deleteData(record)} style={{color: "#f5222d"}}>Delete</a>
               </Space>
             ),
         },
