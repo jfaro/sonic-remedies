@@ -1,5 +1,6 @@
 import { storage } from './firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { testSongData } from '../toggle';
 
 // Upload a song to cloud storage
 // Returns a Promise that resolves to the download URL, rejects if upload fails
@@ -7,7 +8,10 @@ const uploadSong = async (filename, file, songDocument) => {
     console.log("Uploading file " + filename + " to storage")
 
     // Upload the file and metadata
-    const storageRef = ref(storage, `songs/${filename}`)
+    let storageRef = ref(storage, `songs/${filename}`);
+    if (testSongData) {
+        storageRef = ref(storage, `testSongs/${filename}`);
+    } 
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     return new Promise((resolve, reject) => {

@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Table, Tag, Space, Button } from 'antd';
+import { Table, Tag, Space, Button, Popconfirm, message } from 'antd';
 import { db } from '../services/firebase';
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import { CheckCircleTwoTone, CloseCircleTwoTone } from '@ant-design/icons'
 import { deleteData } from '../services/delete';
+import { testSongData } from '../toggle';
 import moment from 'moment';
 import UploadTrack from './UploadTrack';
 import AudioPlayer from './AudioPlayer';
@@ -22,7 +23,13 @@ export default function MusicTable() {
     useEffect(() => {
         const songsList = [];
         const adminList = [];
-        const songsQuery = query(collection(db, 'songs'));
+        let songsQuery;
+        
+        if (testSongData) {
+            songsQuery = query(collection(db, 'testSongs'));
+        } else {
+            songsQuery = query(collection(db, 'songs'));
+        }
 
         const unsubscribe = onSnapshot(songsQuery, (snapshot) => {
             snapshot.forEach((doc) => {
@@ -177,7 +184,16 @@ export default function MusicTable() {
             render: (text, record) => (
               <Space size="middle">
                 <a onClick={() => setPlaying([record.title,record.artist,record.url]) }>Play Song</a>
-                <a onClick={() => deleteData(record)} style={{color: "#f5222d"}}>Delete</a>
+                <Popconfirm
+                    title="Are you sure you want to delete this song?"
+                    onConfirm={() => deleteData(record)}
+                    okText="Yes"
+                    cancelText="No"
+                    placement="topRight"
+                >
+                    <a style={{color: "#f5222d"}}>Delete</a>
+                </Popconfirm>
+                
               </Space>
             ),
         },
