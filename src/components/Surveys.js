@@ -1,7 +1,7 @@
 import { db } from '../services/firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, query, onSnapshot } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import { Card, Col, Row, Space, Spin, Tag, Typography } from "antd";
+import { Card, Col, Row, Space, Spin, Statistic, Tag, Typography } from "antd";
 const { Title } = Typography;
 
 const SurveyTile = ({ surveyData }) => {
@@ -15,8 +15,8 @@ const SurveyTile = ({ surveyData }) => {
             hoverable={true}
             style={{ height: '100%' }}>
             <Space direction='vertical'>
-                <Title level={5}>Questions: {questions ? questions.length : 0}</Title>
-                <Title level={5}>Responses: {responses ? responses.length : 0}</Title>
+                <Statistic title="Questions" value={questions.length} />
+                <Statistic title="Responses" value={responses.length} />
             </Space>
         </Card>
     )
@@ -28,19 +28,18 @@ export default function Surveys() {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        fetchSurveys();
-    }, [])
-
-    async function fetchSurveys() {
-        setSurveys([])
-        setLoading(true);
-        const querySnapshot = await getDocs(collection(db, 'surveys'));
-        querySnapshot.forEach(document => {
-            const data = document.data();
-            setSurveys(arr => [...arr, data]);
+        const q = query(collection(db, 'surveys'));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            setLoading(true);
+            setSurveys([]);
+            querySnapshot.forEach(document => {
+                const data = document.data();
+                setSurveys(arr => [...arr, data]);
+            })
+            setLoading(false);
         })
-        setLoading(false);
-    }
+        return () => unsubscribe();
+    }, [])
 
     if (loading) return <Spin />
 

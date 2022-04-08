@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Table, Tag, Space, Button, Popconfirm, message } from 'antd';
+import { Table, Tag, Space, Button, Popconfirm } from 'antd';
 import { db } from '../services/firebase';
 import { collection, onSnapshot, query } from 'firebase/firestore';
-import { CheckCircleTwoTone, CloseCircleTwoTone } from '@ant-design/icons'
+import { CheckCircleTwoTone, CloseCircleTwoTone, CaretRightOutlined, DeleteOutlined } from '@ant-design/icons'
 import { deleteData } from '../services/delete';
 import { testSongData } from '../toggle';
 import moment from 'moment';
@@ -110,6 +110,7 @@ export default function MusicTable() {
         {
             title: 'Title',
             fixed: 'left',
+            width: 220,
             dataIndex: 'title',
             sorter: (a, b) => a.title.localeCompare(b.title),
             render: (title, row) => <a href={row.url}>{title}</a>
@@ -177,9 +178,14 @@ export default function MusicTable() {
         {
             title: 'Actions',
             key: 'action',
+            fixed: 'right',
             render: (text, record) => (
                 <Space size="middle">
-                    <a onClick={() => setPlaying([record.title, record.artist, record.url])}>Play Song</a>
+                    <Button
+                        shape='circle'
+                        icon={<CaretRightOutlined />}
+                        onClick={() => setPlaying([record.title, record.artist, record.url])}>
+                    </Button>
                     <Popconfirm
                         title="Are you sure you want to delete this song?"
                         onConfirm={() => deleteData(record)}
@@ -187,7 +193,12 @@ export default function MusicTable() {
                         cancelText="No"
                         placement="topRight"
                     >
-                        <a style={{ color: "#f5222d" }}>Delete</a>
+                        <Button
+                            danger
+                            shape='circle'
+                            type='text'
+                            icon={<DeleteOutlined />}>
+                        </Button>
                     </Popconfirm>
 
                 </Space>
