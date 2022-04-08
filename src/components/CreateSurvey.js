@@ -43,6 +43,7 @@ export default function CreateSurvey() {
                 active: false,
                 questions: questions,
                 responses: [],
+                trackIds: [],   // TODO: Add included track IDs
                 createdBy: user.displayName,
                 createdOn: date.toISOString()
             }

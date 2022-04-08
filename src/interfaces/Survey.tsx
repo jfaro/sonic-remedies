@@ -5,9 +5,10 @@ interface Question {
 
 export interface Survey {
     title: string,
-    tracksIds: string[],
+    active: boolean,
     questions: Question[],
     responses: any[],
-    active: boolean,
-    dateCreated: string,
+    trackIds: string[],
+    createdBy: string,
+    createdOn: string
 }
