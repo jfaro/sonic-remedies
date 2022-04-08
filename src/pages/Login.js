@@ -46,7 +46,7 @@ export default function Login() {
 
         if (isMounted) setLoading(false);
         navigate('/');
-    }, [])
+    }, [isMounted, navigate])
 
     return (
         <div className='flex-col flex-center w-100 h-100'>
