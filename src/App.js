@@ -3,17 +3,17 @@ import {
   Routes,
   Route
 } from 'react-router-dom';
+import { ConfigProvider } from 'antd';
 
 import { AuthenticatedRoute, UnauthenticatedRoute } from './components/Routes';
 import { AuthContextProvider } from './services/firebase';
-
 import PageLayout from './components/PageLayout';
+import NoData from './components/NoData';
+
 import Home from './pages/Home';
 import Survey from './pages/Survey';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
-import { ConfigProvider } from 'antd';
-import NoData from './components/NoData';
 
 
 function App() {
