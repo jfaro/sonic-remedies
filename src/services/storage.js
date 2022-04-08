@@ -11,7 +11,7 @@ const uploadSong = async (filename, file, songDocument) => {
     let storageRef = ref(storage, `songs/${filename}`);
     if (testSongData) {
         storageRef = ref(storage, `testSongs/${filename}`);
-    } 
+    }
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     return new Promise((resolve, reject) => {
@@ -37,6 +37,8 @@ const uploadSong = async (filename, file, songDocument) => {
                         break;
                     case 'storage/unknown':
                         console.log("User encountered unknown error");
+                        break;
+                    default:
                         break;
                 }
                 reject(error);
