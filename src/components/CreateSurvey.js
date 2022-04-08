@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {
+    Alert,
     Button,
     Col,
     Divider,
@@ -12,7 +13,9 @@ import {
     Space,
     Typography
 } from "antd";
+import MusicTable from './MusicTable';
 import { useAuth } from '../services/firebase';
+import { addSurvey } from '../services/firestore';
 
 const { Option } = Select;
 const { Title } = Typography;
@@ -34,11 +37,13 @@ const Question = ({ idx, prompt, type, removeQuestion }) => {
 }
 
 export default function CreateSurvey() {
+    const date = new Date();
     const { user } = useAuth();
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [questions, setQuestions] = useState([]);
+    const [includedSongs, setIncludedSongs] = useState([]);
 
     const [surveyForm] = Form.useForm();
     const [addQuestionForm] = Form.useForm();
@@ -46,16 +51,21 @@ export default function CreateSurvey() {
     // Create new survey
     const handleSubmit = async () => {
         try {
-            // Format new survey data
+            // Form validation
             const formValues = await surveyForm.validateFields();
-            const survey = {
+
+            // Format new survey data
+            const surveyValues = {
                 title: formValues.title,
+                active: false,
                 questions: questions,
-                createdBy: user.displayName
+                responses: [],
+                createdBy: user.displayName,
+                createdOn: date.toISOString()
             }
 
             // Add survey in Firestore /surveys collection
-            console.log("Survey:", survey)
+            addSurvey(surveyValues);
 
             // Cleanup
             setIsLoading(false);
@@ -74,20 +84,20 @@ export default function CreateSurvey() {
 
     // Add a new question to the survey
     const addQuestion = async () => {
+        let questionValues;
         try {
-            // Create new question
-            const questionValues = await addQuestionForm.validateFields();
-            questionValues.idx = questions.length;
-
-            // Add new question to questions array
-            const updatedQuestions = [...questions, questionValues];
-            setQuestions(updatedQuestions);
-
-            // Reset form
-            addQuestionForm.resetFields();
+            questionValues = await addQuestionForm.validateFields();
         } catch (error) {
-            console.log("Error adding question:", error);
+            return;
         }
+
+        // Add new question to questions array
+        questionValues.idx = questions.length;
+        const updatedQuestions = [...questions, questionValues];
+        setQuestions(updatedQuestions);
+
+        // Reset form
+        addQuestionForm.resetFields();
     }
 
     // Remove a question from the survey
@@ -126,8 +136,16 @@ export default function CreateSurvey() {
 
                 {/* Set the survey's title */}
                 <Title level={5}>Survey title</Title>
-                <Form layout='vertical' form={surveyForm}>
-                    <Form.Item name='title'>
+                <Form
+                    layout='vertical'
+                    form={surveyForm}
+                    requiredMark={false}>
+                    <Form.Item
+                        name='title'
+                        rules={[{
+                            required: true,
+                            message: "Provide a title for this survey",
+                        }]}>
                         <Input placeholder="Enter a title for this survey" />
                     </Form.Item>
                 </Form>
@@ -156,10 +174,17 @@ export default function CreateSurvey() {
                 <Form
                     layout='vertical'
                     form={addQuestionForm}
-                    initialValues={{ type: 'text' }}>
+                    initialValues={{ type: 'text' }}
+                    requiredMark={false}>
                     <Row gutter={24} align='bottom'>
                         <Col span={12}>
-                            <Form.Item name='prompt' label="Prompt">
+                            <Form.Item
+                                name='prompt'
+                                label="Prompt"
+                                rules={[{
+                                    required: true,
+                                    message: "Provide a prompt for this question",
+                                }]}>
                                 <Input placeholder="Enter a prompt" />
                             </Form.Item>
                         </Col>
@@ -174,7 +199,7 @@ export default function CreateSurvey() {
                         </Col>
                         <Col>
                             <Form.Item>
-                                <Button type='secondary' onClick={addQuestion}>Add question</Button>
+                                <Button onClick={addQuestion}>Add question</Button>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -184,6 +209,14 @@ export default function CreateSurvey() {
 
                 {/* Select songs for this survey */}
                 <Title level={5}>Included tracks</Title>
+                <List
+                    dataSource={includedSongs}
+                    renderItem={({ idx, title, length }) => (
+                        <List.Item>
+                            {title}
+                        </List.Item>
+                    )}
+                />
             </Modal>
         </>
     )
