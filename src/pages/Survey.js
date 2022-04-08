@@ -18,7 +18,7 @@ export default function Survey() {
                     justifyContent: 'center',
                     marginBottom: '2rem'
                 }}>
-                    <AudioPlayer />
+                    <AudioPlayer song={"Test Song"} artist={"Test Artist"} url={"https://firebasestorage.googleapis.com/v0/b/sonic-remedies-dev.appspot.com/o/songs%2F13%20Wolves.mp3?alt=media&token=9a88abc9-df3a-4b16-8f30-30c42e2424ff"} orientation='column'/>
                 </div>
                 <Form
                     layout='vertical'

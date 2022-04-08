@@ -2,6 +2,11 @@ import { modeOptions } from "./modeOptions";
 
 export const keyOptions = [
     {
+        value: 'A♭',
+        label: 'A♭',
+        children: modeOptions,
+    },
+    {
         value: 'A',
         label: 'A',
         children: modeOptions,
@@ -79,11 +84,6 @@ export const keyOptions = [
     {
         value: 'G♯',
         label: 'G♯',
-        children: modeOptions,
-    },
-    {
-        value: 'A♭',
-        label: 'A♭',
         children: modeOptions,
     },
 ];

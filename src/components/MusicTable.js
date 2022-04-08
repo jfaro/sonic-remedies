@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Table, Tag, Space, Button } from 'antd';
+import { Table, Tag, Space, Button, Popconfirm, message } from 'antd';
 import { db } from '../services/firebase';
 import { collection, onSnapshot, query } from 'firebase/firestore';
-import { CheckCircleTwoTone, CloseCircleTwoTone, RedoOutlined } from '@ant-design/icons'
+import { CheckCircleTwoTone, CloseCircleTwoTone } from '@ant-design/icons'
+import { deleteData } from '../services/delete';
+import { testSongData } from '../toggle';
 import moment from 'moment';
 import UploadTrack from './UploadTrack';
+import AudioPlayer from './AudioPlayer';
 
 /**
  * This component, MusicTable, is used as part of the administrative half of the site.
@@ -14,12 +17,19 @@ export default function MusicTable() {
     const [loading, setLoading] = useState(true);
     const [songs, setSongs] = useState([]);
     const [admins, setAdmins] = useState([]);
+    const [playing, setPlaying] = useState([]);
 
     // Get data on mount
     useEffect(() => {
         const songsList = [];
         const adminList = [];
-        const songsQuery = query(collection(db, 'songs'));
+        let songsQuery;
+        
+        if (testSongData) {
+            songsQuery = query(collection(db, 'testSongs'));
+        } else {
+            songsQuery = query(collection(db, 'songs'));
+        }
 
         const unsubscribe = onSnapshot(songsQuery, (snapshot) => {
             snapshot.forEach((doc) => {
@@ -56,6 +66,11 @@ export default function MusicTable() {
         return () => unsubscribe();
     }, [loading]);
 
+    /**
+     * Returns a tag for a green check or red X for the texture and improv columns
+     * @param {Boolean} props with one value, .isTrue
+     * @returns {Tag} of AntDesign two-tone icons CheckCircle or CloseCircle
+     */ 
     function Checkmark(props)
     {
         if (props.isTrue) {
@@ -65,6 +80,24 @@ export default function MusicTable() {
         }
     }
 
+    /**
+     * Hides the audio player until "Play Song" is clicked
+     * @returns {AudioPlayer} if the length of the playing data array is non-zero, else null
+     */
+    function ChartPlayer()
+    {
+        if (playing.length !== 0) {
+            return <AudioPlayer song={playing[0]} artist={playing[1]} url={playing[2]} orientation={'row'}></AudioPlayer>
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Converts between total seconds of a song's length into a mm:ss format
+     * @param {Integer} sec 
+     * @returns {string} of human formatted minutes:seconds format
+     */
     function secondsToTime(sec){
         if(typeof sec !== 'number')
         {
@@ -146,6 +179,25 @@ export default function MusicTable() {
             sorter: (a, b) => a.timeAdded.localeCompare(b.timeAdded),
         },
         {
+            title: 'Actions',
+            key: 'action',
+            render: (text, record) => (
+              <Space size="middle">
+                <a onClick={() => setPlaying([record.title,record.artist,record.url]) }>Play Song</a>
+                <Popconfirm
+                    title="Are you sure you want to delete this song?"
+                    onConfirm={() => deleteData(record)}
+                    okText="Yes"
+                    cancelText="No"
+                    placement="topRight"
+                >
+                    <a style={{color: "#f5222d"}}>Delete</a>
+                </Popconfirm>
+                
+              </Space>
+            ),
+        },
+        {
             title: "Download Link",
             dataIndex: "url",
             key: "url"
@@ -162,6 +214,7 @@ export default function MusicTable() {
             <Space size="middle">
                 <UploadTrack />
                 <Button onClick={() => setLoading(true)}>Reload Table</Button>
+                <ChartPlayer></ChartPlayer>
             </Space>
             <p></p>
             <Table
