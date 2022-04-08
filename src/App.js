@@ -12,38 +12,43 @@ import Home from './pages/Home';
 import Survey from './pages/Survey';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
+import { ConfigProvider } from 'antd';
+import NoData from './components/NoData';
+
 
 function App() {
   return (
     <AuthContextProvider>
-      <Router>
-        <PageLayout>
-          <Routes>
+      <ConfigProvider renderEmpty={NoData}>
+        <Router>
+          <PageLayout>
+            <Routes>
 
-            {/* Home */}
-            <Route path='/' element={<Home />} />
+              {/* Home */}
+              <Route path='/' element={<Home />} />
 
-            {/* Unauthenticated routes */}
-            <Route path='/login' element={
-              <UnauthenticatedRoute>
-                <Login />
-              </UnauthenticatedRoute>
-            } />
+              {/* Unauthenticated routes */}
+              <Route path='/login' element={
+                <UnauthenticatedRoute>
+                  <Login />
+                </UnauthenticatedRoute>
+              } />
 
-            {/* Authenticated routes */}
-            <Route path='/survey' element={
-              <AuthenticatedRoute>
-                <Survey />
-              </AuthenticatedRoute>
-            } />
-            <Route path='/admin' element={
-              <AuthenticatedRoute>
-                <Admin />
-              </AuthenticatedRoute>
-            } />
-          </Routes>
-        </PageLayout>
-      </Router>
+              {/* Authenticated routes */}
+              <Route path='/survey' element={
+                <AuthenticatedRoute>
+                  <Survey />
+                </AuthenticatedRoute>
+              } />
+              <Route path='/admin' element={
+                <AuthenticatedRoute>
+                  <Admin />
+                </AuthenticatedRoute>
+              } />
+            </Routes>
+          </PageLayout>
+        </Router>
+      </ConfigProvider>
     </AuthContextProvider>
   );
 }
