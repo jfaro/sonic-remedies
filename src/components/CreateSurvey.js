@@ -16,25 +16,11 @@ import {
 import MusicTable from './MusicTable';
 import { useAuth } from '../services/firebase';
 import { addSurvey } from '../services/firestore';
+import Questions from './CreateSurveyQuestions';
 
 const { Option } = Select;
 const { Title } = Typography;
 
-const Question = ({ idx, prompt, type, removeQuestion }) => {
-    return (
-        <Row gutter={24} style={{ width: '100%' }}>
-            <Col span={12}>
-                {prompt}
-            </Col>
-            <Col flex='auto'>
-                {type}
-            </Col>
-            <Col>
-                <Button danger onClick={() => removeQuestion(idx)}>Remove</Button>
-            </Col>
-        </Row>
-    )
-}
 
 export default function CreateSurvey() {
     const date = new Date();
@@ -111,6 +97,7 @@ export default function CreateSurvey() {
         setQuestions(updatedQuestions);
     }
 
+    // Reset modal to how it appears when freshly opened on page load
     const resetModal = () => {
         surveyForm.resetFields();
         addQuestionForm.resetFields();
@@ -119,9 +106,7 @@ export default function CreateSurvey() {
 
     return (
         <>
-            <Button
-                type='primary'
-                onClick={() => setIsModalVisible(true)}>
+            <Button type='primary' onClick={() => setIsModalVisible(true)}>
                 Create new survey
             </Button>
 
@@ -154,19 +139,7 @@ export default function CreateSurvey() {
 
                 {/* Render all questions */}
                 <Title level={5}>Questions</Title>
-                <List
-                    dataSource={questions}
-                    renderItem={({ idx, prompt, type }) => (
-                        <List.Item>
-                            <Question
-                                idx={idx}
-                                prompt={prompt}
-                                type={type}
-                                removeQuestion={removeQuestion} />
-                        </List.Item>
-                    )}
-                />
-
+                <Questions questions={questions} removeQuestion={removeQuestion} />
                 <Divider />
 
                 {/* Add a question to the survey */}
