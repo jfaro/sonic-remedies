@@ -24,7 +24,7 @@ export default function MusicTable() {
         const songsList = [];
         const adminList = [];
         let songsQuery;
-        
+
         if (testSongData) {
             songsQuery = query(collection(db, 'testSongs'));
         } else {
@@ -44,8 +44,7 @@ export default function MusicTable() {
 
                 // Admin filtering
                 const ad = doc.data().admin;
-                if(adminList.indexOf(ad) === -1)
-                {
+                if (adminList.indexOf(ad) === -1) {
                     adminList.push(ad);
                 }
             });
@@ -54,7 +53,7 @@ export default function MusicTable() {
             adminList.forEach((admin) => {
                 tempAdmin.push({
                     text: admin,
-                    value: admin, 
+                    value: admin,
                 });
             });
 
@@ -70,13 +69,12 @@ export default function MusicTable() {
      * Returns a tag for a green check or red X for the texture and improv columns
      * @param {Boolean} props with one value, .isTrue
      * @returns {Tag} of AntDesign two-tone icons CheckCircle or CloseCircle
-     */ 
-    function Checkmark(props)
-    {
+     */
+    function Checkmark(props) {
         if (props.isTrue) {
-            return <CheckCircleTwoTone twoToneColor="#52c41a"/>
+            return <CheckCircleTwoTone twoToneColor="#52c41a" />
         } else {
-            return <CloseCircleTwoTone twoToneColor="#f5222d"/>
+            return <CloseCircleTwoTone twoToneColor="#f5222d" />
         }
     }
 
@@ -84,8 +82,7 @@ export default function MusicTable() {
      * Hides the audio player until "Play Song" is clicked
      * @returns {AudioPlayer} if the length of the playing data array is non-zero, else null
      */
-    function ChartPlayer()
-    {
+    function ChartPlayer() {
         if (playing.length !== 0) {
             return <AudioPlayer song={playing[0]} artist={playing[1]} url={playing[2]} orientation={'row'}></AudioPlayer>
         } else {
@@ -98,15 +95,14 @@ export default function MusicTable() {
      * @param {Integer} sec 
      * @returns {string} of human formatted minutes:seconds format
      */
-    function secondsToTime(sec){
-        if(typeof sec !== 'number')
-        {
+    function secondsToTime(sec) {
+        if (typeof sec !== 'number') {
             return "-";
         }
 
-        var m = Math.floor(sec / 60).toString().padStart(2,'0'),
-            s = Math.floor(sec % 60).toString().padStart(2,'0');
-        
+        var m = Math.floor(sec / 60).toString().padStart(2, '0'),
+            s = Math.floor(sec % 60).toString().padStart(2, '0');
+
         return m + ':' + s;
     }
 
@@ -138,15 +134,15 @@ export default function MusicTable() {
             dataIndex: 'genre',
             render: tags => (
                 <>
-                  {tags.map(tag => {
-                    return (
-                      <Tag color={'geekblue'} key={tag}>
-                        {tag}
-                      </Tag>
-                    );
-                  })}
+                    {tags.map(tag => {
+                        return (
+                            <Tag color={'geekblue'} key={tag}>
+                                {tag}
+                            </Tag>
+                        );
+                    })}
                 </>
-              ),
+            ),
         },
         {
             title: 'Tempo',
@@ -182,19 +178,19 @@ export default function MusicTable() {
             title: 'Actions',
             key: 'action',
             render: (text, record) => (
-              <Space size="middle">
-                <a onClick={() => setPlaying([record.title,record.artist,record.url]) }>Play Song</a>
-                <Popconfirm
-                    title="Are you sure you want to delete this song?"
-                    onConfirm={() => deleteData(record)}
-                    okText="Yes"
-                    cancelText="No"
-                    placement="topRight"
-                >
-                    <a style={{color: "#f5222d"}}>Delete</a>
-                </Popconfirm>
-                
-              </Space>
+                <Space size="middle">
+                    <a onClick={() => setPlaying([record.title, record.artist, record.url])}>Play Song</a>
+                    <Popconfirm
+                        title="Are you sure you want to delete this song?"
+                        onConfirm={() => deleteData(record)}
+                        okText="Yes"
+                        cancelText="No"
+                        placement="topRight"
+                    >
+                        <a style={{ color: "#f5222d" }}>Delete</a>
+                    </Popconfirm>
+
+                </Space>
             ),
         },
         {
@@ -228,6 +224,6 @@ export default function MusicTable() {
                 scroll={{ y: 240, x: 1600 }}
             />
         </div>
-        
+
     )
 }
