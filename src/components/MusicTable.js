@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Table, Tag, Space, Button, Popconfirm } from 'antd';
+import { Table, Tag, Space, Button, Popconfirm, Select } from 'antd';
 import { db } from '../services/firebase';
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import { CheckCircleTwoTone, CloseCircleTwoTone, CaretRightOutlined, DeleteOutlined } from '@ant-design/icons'
@@ -18,6 +18,8 @@ export default function MusicTable() {
     const [songs, setSongs] = useState([]);
     const [admins, setAdmins] = useState([]);
     const [playing, setPlaying] = useState([]);
+    const [filter, setFilter] = useState([]);
+    const { Option } = Select;
 
     // Get data on mount
     useEffect(() => {
@@ -106,6 +108,26 @@ export default function MusicTable() {
         return m + ':' + s;
     }
 
+    function columnFiltering(filters) {
+        setFilter(filters);
+    }
+
+    const columnList = [
+        <Option key={'title'}>Title</Option>,
+        <Option key={'filename'}>Filename</Option>,
+        <Option key={'length'}>Length</Option>,
+        <Option key={'artist'}>Artist</Option>,
+        <Option key={'album'}>Album</Option>,
+        <Option key={'genre'}>Genre</Option>,
+        <Option key={'tempo'}>Tempo</Option>,
+        <Option key={'key_signature'}>Key/Mode</Option>,
+        <Option key={'texture'}>Consistent Texture</Option>,
+        <Option key={'improv'}>Improvisation</Option>,
+        <Option key={'admin'}>Added By</Option>,
+        <Option key={'timeAdded'}>Date Added</Option>,
+        <Option key={'url'}>Download URL</Option>,
+    ];
+
     const columns = [
         {
             title: 'Title',
@@ -114,6 +136,12 @@ export default function MusicTable() {
             dataIndex: 'title',
             sorter: (a, b) => a.title.localeCompare(b.title),
             render: (title, row) => <a href={row.url}>{title}</a>
+        },
+        {
+            title: 'Filename',
+            dataIndex: 'filename',
+            key: 'filename',
+            sorter: (a, b) => a.filename.localeCompare(b.filename),
         },
         {
             title: 'Length',
@@ -176,6 +204,11 @@ export default function MusicTable() {
             sorter: (a, b) => a.timeAdded.localeCompare(b.timeAdded),
         },
         {
+            title: 'Download Link',
+            dataIndex: 'url',
+            render: url => (<a href={url}>Download</a>),
+        },
+        {
             title: 'Actions',
             key: 'action',
             fixed: 'right',
@@ -204,12 +237,8 @@ export default function MusicTable() {
                 </Space>
             ),
         },
-        {
-            title: "Download Link",
-            dataIndex: "url",
-            key: "url"
-        },
-    ].filter(col => col.dataIndex !== 'url');
+        
+    ].filter(col => filter.indexOf(col.dataIndex) === -1);
 
     // Temporary function, remove later.
     function onChange(pagination, filters, sorter, extra) {
@@ -221,8 +250,19 @@ export default function MusicTable() {
             <Space size="middle">
                 <UploadTrack />
                 <Button onClick={() => setLoading(true)}>Reload Table</Button>
-                <ChartPlayer></ChartPlayer>
+                <Select
+                    mode="multiple"
+                    allowClear
+                    style={{ width: '100%', minWidth: '150px'}}
+                    placeholder="Filter columns"
+                    defaultValue={filter}
+                    onChange={(values) => setFilter(values)}
+                >
+                    {columnList}
+                </Select>
             </Space>
+            <p></p>
+            <ChartPlayer></ChartPlayer>
             <p></p>
             <Table
                 columns={columns}
