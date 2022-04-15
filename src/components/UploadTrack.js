@@ -51,7 +51,7 @@ export default function UploadTrack() {
                 const formattedValues = {
                     admin: user.displayName,
                     genre: formValues.genre.split(",").map(s => s.trim()),
-                    timeAdded: current.toISOString(),
+                    dateAdded: current.toISOString(),
                     filename: filename,
                     improv: formValues.improv === "y",
                     texture: formValues.texture === "y",
@@ -188,7 +188,7 @@ export default function UploadTrack() {
                         <Col span={12}>
                             <Form.Item
                                 label="Key and Mode"
-                                name="key_signature"
+                                name="keySignature"
                                 rules={[{ required: true, message: "Please give the track's key and mode!" }]}>
                                 <Cascader options={keyOptions} placeholder="Please select" />
                             </Form.Item>

@@ -4,7 +4,6 @@ import { db } from '../services/firebase';
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import { CheckCircleTwoTone, CloseCircleTwoTone, CaretRightOutlined, DeleteOutlined } from '@ant-design/icons'
 import { deleteData } from '../services/delete';
-import { testSongData } from '../toggle';
 import moment from 'moment';
 import UploadTrack from './UploadTrack';
 import AudioPlayer from './AudioPlayer';
@@ -25,22 +24,17 @@ export default function MusicTable() {
     useEffect(() => {
         const songsList = [];
         const adminList = [];
-        let songsQuery;
-
-        if (testSongData) {
-            songsQuery = query(collection(db, 'testSongs'));
-        } else {
-            songsQuery = query(collection(db, 'songs'));
-        }
+        const songsQuery = query(collection(db, 'songs'));
 
         const unsubscribe = onSnapshot(songsQuery, (snapshot) => {
             snapshot.forEach((doc) => {
+                console.log()
                 // Song List
                 songsList.push({
                     ...doc.data(),
                     id: doc.id,
-                    key_signature: doc.data().key_signature[0] + " " + doc.data().key_signature[1],
-                    timeAdded: moment(doc.data().timeAdded, moment.ISO_8601).format("M/D/YYYY, h:mm:ss a"),
+                    keySignature: doc.data().keySignature[0] + " " + doc.data().keySignature[1],
+                    dateAdded: moment(doc.data().dateAdded, moment.ISO_8601).format("M/D/YYYY, h:mm:ss a"),
                     length: secondsToTime(doc.data().length)
                 });
 
@@ -120,11 +114,11 @@ export default function MusicTable() {
         <Option key={'album'}>Album</Option>,
         <Option key={'genre'}>Genre</Option>,
         <Option key={'tempo'}>Tempo</Option>,
-        <Option key={'key_signature'}>Key/Mode</Option>,
+        <Option key={'keySignature'}>Key/Mode</Option>,
         <Option key={'texture'}>Consistent Texture</Option>,
         <Option key={'improv'}>Improvisation</Option>,
         <Option key={'admin'}>Added By</Option>,
-        <Option key={'timeAdded'}>Date Added</Option>,
+        <Option key={'dateAdded'}>Date Added</Option>,
         <Option key={'url'}>Download URL</Option>,
     ];
 
@@ -180,7 +174,7 @@ export default function MusicTable() {
         },
         {
             title: 'Key / Mode',
-            dataIndex: 'key_signature'
+            dataIndex: 'keySignature'
         },
         {
             title: 'Consistent Texture',
@@ -200,8 +194,8 @@ export default function MusicTable() {
         },
         {
             title: 'Date Added',
-            dataIndex: 'timeAdded',
-            sorter: (a, b) => a.timeAdded.localeCompare(b.timeAdded),
+            dataIndex: 'dateAdded',
+            sorter: (a, b) => a.dateAdded.localeCompare(b.dateAdded),
         },
         {
             title: 'Download Link',
@@ -237,13 +231,15 @@ export default function MusicTable() {
                 </Space>
             ),
         },
-        
+
     ].filter(col => filter.indexOf(col.dataIndex) === -1);
 
     // Temporary function, remove later.
     function onChange(pagination, filters, sorter, extra) {
         console.log('params', pagination, filters, sorter, extra);
     }
+
+    console.log(songs)
 
     return (
         <div>
@@ -253,7 +249,7 @@ export default function MusicTable() {
                 <Select
                     mode="multiple"
                     allowClear
-                    style={{ width: '100%', minWidth: '150px'}}
+                    style={{ width: '100%', minWidth: '150px' }}
                     placeholder="Filter columns"
                     defaultValue={filter}
                     onChange={(values) => setFilter(values)}
