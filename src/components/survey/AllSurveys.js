@@ -43,14 +43,17 @@ export default function AllSurveys() {
         }
 
         // Activate
-        const noSurveysActive = true;
+        let noActiveSurveys = true;
         surveys.forEach(survey => {
             if (survey.active) {
-                noSurveysActive = false;
+                noActiveSurveys = false;
             }
         })
-
-        console.log("Toggle survey", surveyIndex)
+        if (noActiveSurveys) {
+            updateSurveyActiveStatus(surveyPath, true);
+        } else {
+            showNotification("Error", "Only one survey can be active.")
+        }
     }
 
     const showNotification = (message, description) => {
