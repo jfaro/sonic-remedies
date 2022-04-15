@@ -1,8 +1,7 @@
-import { db } from '../services/firebase';
+import { db } from '../../services/firebase';
 import { collection, query, onSnapshot } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { Card, Col, Row, Space, Spin, Statistic, Tag, Typography } from "antd";
-const { Title } = Typography;
 
 const SurveyTile = ({ surveyData }) => {
     const { title, questions, responses, active } = surveyData;
@@ -22,7 +21,7 @@ const SurveyTile = ({ surveyData }) => {
     )
 }
 
-export default function Surveys() {
+export default function AllSurveys() {
 
     const [surveys, setSurveys] = useState([]);
     const [loading, setLoading] = useState(false);

@@ -1,12 +1,17 @@
-interface Question {
+export interface IQuestion {
+    idx: number,
     prompt: string,
-    type: 'text' | 'color' | 'bool'
+    type: 'text' | 'color' | 'mutipleSelect' | 'singleSelect'
 }
 
-export interface Survey {
+export interface IMultipleChoice extends IQuestion {
+    options: string[]
+}
+
+export interface ISurvey {
     title: string,
     active: boolean,
-    questions: Question[],
+    questions: IQuestion[],
     responses: any[],
     trackIds: string[],
     createdBy: string,

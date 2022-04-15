@@ -1,7 +1,7 @@
 import { Divider, Space, Typography } from "antd"
 import MusicTable from "../components/MusicTable";
-import Surveys from '../components/Surveys';
-import CreateSurvey from "../components/CreateSurvey";
+import AllSurveys from '../components/survey/AllSurveys';
+import CreateSurvey from "../components/survey/CreateSurvey";
 
 const { Title } = Typography;
 
@@ -13,7 +13,7 @@ export default function Admin() {
             <Title level={3}>Surveys</Title>
             <Space direction='vertical' size='large'>
                 <CreateSurvey />
-                <Surveys />
+                <AllSurveys />
             </Space>
 
             <Divider />
