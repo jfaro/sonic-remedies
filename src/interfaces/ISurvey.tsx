@@ -10,10 +10,10 @@ export interface IMultipleChoice extends IQuestion {
 
 export interface ISurvey {
     title: string,
+    admin: string,
     active: boolean,
     questions: IQuestion[],
     responses: any[],
     trackIds: string[],
-    createdBy: string,
-    createdOn: string
+    dateAdded: string
 }
