@@ -2,7 +2,6 @@ import { db } from './firebase';
 import { doc, deleteDoc } from "firebase/firestore";
 import { ref, getStorage, deleteObject } from "firebase/storage";
 import { message } from 'antd';
-import { testSongData } from '../toggle';
 
 /**
  * Deletes song data from Firestore and Storage
@@ -12,10 +11,6 @@ const deleteData = async (songValues) => {
     const storage = getStorage();
     let database = "songs"
 
-    if (testSongData) {
-        database = "testSongs";
-    }
-    
     // Remove song from Firebase Storage
     const songRef = ref(storage, `${database}/${songValues.filename}`)
 
