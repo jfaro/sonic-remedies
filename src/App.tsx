@@ -19,7 +19,7 @@ import Login from './pages/Login';
 function App() {
   return (
     <AuthContextProvider>
-      <ConfigProvider renderEmpty={NoData}>
+      <ConfigProvider renderEmpty={NoData} space={{ size: 'large' }}>
         <Router>
           <PageLayout>
             <Routes>
