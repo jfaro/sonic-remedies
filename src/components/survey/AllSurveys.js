@@ -1,29 +1,15 @@
 import { db } from '../../services/firebase';
 import { collection, query, onSnapshot } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import { Card, Col, Row, Space, Spin, Statistic, Tag, Typography } from "antd";
+import { Alert, Space, Spin, notification } from "antd";
+import SurveyTile from './SurveyTile';
+import { removeSurvey, updateSurveyActiveStatus } from 'services/firestore';
 
-const SurveyTile = ({ surveyData }) => {
-    const { title, questions, responses, active } = surveyData;
-    const status = active ? <Tag color="green">Active</Tag> : <Tag color="red">Inactive</Tag>
-
-    return (
-        <Card
-            title={title}
-            extra={status}
-            hoverable={true}
-            style={{ height: '100%' }}>
-            <Space direction='vertical'>
-                <Statistic title="Questions" value={questions.length} />
-                <Statistic title="Responses" value={responses.length} />
-            </Space>
-        </Card>
-    )
-}
 
 export default function AllSurveys() {
 
     const [surveys, setSurveys] = useState([]);
+    const [surveyRefs, setSurveyRefs] = useState([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -31,27 +17,67 @@ export default function AllSurveys() {
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             setLoading(true);
             setSurveys([]);
+            setSurveyRefs([]);
             querySnapshot.forEach(document => {
                 const data = document.data();
                 setSurveys(arr => [...arr, data]);
+                setSurveyRefs(arr => [...arr, document.ref.path])
             })
             setLoading(false);
         })
         return () => unsubscribe();
     }, [])
 
+    const handleRemoveSurvey = (surveyIndex) => {
+        const surveyPath = surveyRefs[surveyIndex];
+        removeSurvey(surveyPath);
+    }
+
+    const handleToggleActive = (surveyIndex) => {
+        const surveyPath = surveyRefs[surveyIndex];
+
+        // Deactivate
+        if (surveys[surveyIndex].active) {
+            updateSurveyActiveStatus(surveyPath, false);
+            return;
+        }
+
+        // Activate
+        const noSurveysActive = true;
+        surveys.forEach(survey => {
+            if (survey.active) {
+                noSurveysActive = false;
+            }
+        })
+
+        console.log("Toggle survey", surveyIndex)
+    }
+
+    const showNotification = (message, description) => {
+        notification.open({
+            message: message,
+            description: description,
+        });
+    };
+
     if (loading) return <Spin />
 
     return (
-        < Row gutter={24} >
-            {surveys.length > 0 ? surveys.map((survey, idx) => {
-                return (
-                    <Col key={idx} xs={24} sm={12} md={8} lg={6} >
-                        <SurveyTile surveyData={survey} key={idx} />
-                    </Col>
-                )
-            }) : "No surveys found!"
+        <Space wrap>
+            {
+                surveys.length > 0 ? surveys.map((survey, idx) => {
+                    return (
+                        <SurveyTile
+                            key={idx}
+                            surveyIndex={idx}
+                            surveyData={survey}
+                            removeSurvey={handleRemoveSurvey}
+                            toggleActive={handleToggleActive} />
+                    )
+                }) : <Alert
+                    message="No surveys created"
+                    type="info" />
             }
-        </Row >
+        </ Space>
     )
 }

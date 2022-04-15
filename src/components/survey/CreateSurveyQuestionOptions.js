@@ -20,7 +20,6 @@ const CreateSurveyQuestionOptions = ({ form, questionIndex }) => {
                             return (
                                 <div style={{ paddingLeft: '64px' }}>
                                     {questionOptions.map((questionOption, optionIndex) => {
-                                        console.log(questionOption);
                                         return (
                                             // Begin render for a single option
                                             <>
@@ -32,7 +31,7 @@ const CreateSurveyQuestionOptions = ({ form, questionIndex }) => {
                                                         <Form.Item
                                                             {...questionOption}
                                                             name={[questionOption.name, 'optionText']}
-                                                            label={`Option ${optionIndex}`}
+                                                            label={`Option ${optionIndex + 1}`}
                                                             rules={[{ required: true, message: 'Missing option text' }]}
                                                         >
                                                             <Input style={{ width: '100%' }} />

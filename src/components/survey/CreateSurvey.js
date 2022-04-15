@@ -12,7 +12,7 @@ import { useAuth } from '../../services/firebase';
 import { addSurvey } from '../../services/firestore';
 import CreateSurveyQuestions from './CreateSurveyQuestions';
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 export default function CreateSurvey() {
     const date = new Date();
@@ -30,21 +30,18 @@ export default function CreateSurvey() {
             // Form validation
             const formValues = await form.validateFields();
 
-            // // Format new survey data
-            // const surveyValues = {
-            //     title: formValues.title,
-            //     active: false,
-            //     questions: questions,
-            //     responses: [],
-            //     trackIds: [],   // TODO: Add included track IDs
-            //     createdBy: user.displayName,
-            //     createdOn: date.toISOString()
-            // }
-
-            console.log(formValues);
+            // Format new survey data
+            const surveyValues = {
+                ...formValues,
+                active: false,
+                responses: [],
+                trackIds: [],   // TODO: Add included track IDs
+                admin: user.displayName,
+                dateAdded: date.toISOString()
+            }
 
             // // Add survey in Firestore /surveys collection
-            // addSurvey(surveyValues);
+            addSurvey(surveyValues);
 
             // Cleanup
             setIsLoading(false);
@@ -104,7 +101,7 @@ export default function CreateSurvey() {
                 <Divider />
 
                 {/* Select songs for this survey */}
-                <Title level={5}>Included tracks</Title>
+                <Title level={5}>Track options</Title>
                 <List
                     dataSource={includedSongs}
                     renderItem={({ idx, title, length }) => (
