@@ -1,7 +1,8 @@
-import { Divider, Space, Typography } from "antd"
+import { Divider, Space, Typography, Row, Col } from "antd"
 import MusicTable from "../components/MusicTable";
 import AllSurveys from '../components/survey/AllSurveys';
 import CreateSurvey from "../components/survey/CreateSurvey";
+import CreateQuestionSet from "../components/survey/CreateQuestionSet";
 
 const { Title } = Typography;
 
@@ -9,12 +10,21 @@ export default function Admin() {
 
     return (
         <div className="flex-col w-100">
-
-            <Title level={3}>Surveys</Title>
-            <Space direction='vertical' size='large'>
-                <CreateSurvey />
-                <AllSurveys />
-            </Space>
+            <Row>
+                <Col span={12}>
+                    <Title level={3}>Question Sets</Title>
+                    <Space direction='vertical' size='large'>
+                        <CreateQuestionSet />
+                    </Space> 
+                </Col>
+                <Col span={12}>
+                    <Title level={3}>Surveys</Title>
+                    <Space direction='vertical' size='large'>
+                        <CreateSurvey />
+                    </Space> 
+                </Col>
+            </Row>
+            
 
             <Divider />
 
