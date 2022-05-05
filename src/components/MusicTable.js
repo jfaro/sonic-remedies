@@ -102,10 +102,6 @@ export default function MusicTable() {
         return m + ':' + s;
     }
 
-    function columnFiltering(filters) {
-        setFilter(filters);
-    }
-
     const columnList = [
         <Option key={'title'}>Title</Option>,
         <Option key={'filename'}>Filename</Option>,
@@ -234,13 +230,6 @@ export default function MusicTable() {
 
     ].filter(col => filter.indexOf(col.dataIndex) === -1);
 
-    // Temporary function, remove later.
-    function onChange(pagination, filters, sorter, extra) {
-        console.log('params', pagination, filters, sorter, extra);
-    }
-
-    console.log(songs)
-
     return (
         <div>
             <Space size="middle">
@@ -264,7 +253,6 @@ export default function MusicTable() {
                 columns={columns}
                 dataSource={songs}
                 loading={loading}
-                onChange={onChange}
                 pagination={false}
                 rowKey='id'
                 size='small'
