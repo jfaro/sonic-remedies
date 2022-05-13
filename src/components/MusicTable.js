@@ -28,7 +28,6 @@ export default function MusicTable() {
 
         const unsubscribe = onSnapshot(songsQuery, (snapshot) => {
             snapshot.forEach((doc) => {
-                console.log()
                 // Song List
                 songsList.push({
                     ...doc.data(),
@@ -238,8 +237,6 @@ export default function MusicTable() {
     function onChange(pagination, filters, sorter, extra) {
         console.log('params', pagination, filters, sorter, extra);
     }
-
-    console.log(songs)
 
     return (
         <div>
