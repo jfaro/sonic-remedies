@@ -45,9 +45,6 @@ export default function Navigation() {
 
     return (
         <nav className='navigation'>
-            <Link to="/">
-                <Button type='text'>Home</Button>
-            </Link>
             <Link to="/survey">
                 <Button type='text'>Survey</Button>
             </Link>
