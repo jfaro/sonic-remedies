@@ -13,6 +13,7 @@ export interface IQuestionSet {
     admin: string,
     dateAdded: string,
     questions?: IQuestion[],
+    questionCount: number,
 }
 
 export interface ISurvey {

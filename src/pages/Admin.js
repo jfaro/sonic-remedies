@@ -3,8 +3,9 @@ import { Space, Typography, Menu } from "antd";
 import { PlayCircleOutlined, QuestionCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import MusicTable from "../components/MusicTable";
 import AllSurveys from '../components/survey/AllSurveys';
+import AllQuestionSets from "../components/questionsets/AllQuestionSets";
 import CreateSurvey from "../components/survey/CreateSurvey";
-import CreateQuestionSet from "../components/survey/CreateQuestionSet";
+import CreateQuestionSet from "../components/questionsets/CreateQuestionSet";
 
 const { Title } = Typography;
 
@@ -38,8 +39,9 @@ export default function Admin() {
         return(
             <p>
                 <Title level={3}>Question Sets</Title>
-                <Space direction='horizontal' size='large'>
+                <Space direction='vertical' size='large'>
                     <CreateQuestionSet />
+                    <AllQuestionSets></AllQuestionSets>
                 </Space> 
             </p>
         );

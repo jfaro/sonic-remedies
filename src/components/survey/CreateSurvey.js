@@ -10,7 +10,6 @@ import {
 } from "antd";
 import { useAuth } from '../../services/firebase';
 import { addSurvey } from '../../services/firestore';
-import CreateSurveyQuestions from './CreateSurveyQuestions';
 
 const { Title } = Typography;
 
@@ -60,6 +59,7 @@ export default function CreateSurvey() {
 
     // Reset modal to how it appears when freshly opened on page load
     const resetModal = () => {
+        console.log(form);
         form.resetFields();
     }
 
@@ -90,12 +90,6 @@ export default function CreateSurvey() {
                         rules={[{ required: true, message: 'A title is required' }]}>
                         <Input placeholder="Enter a title for this survey" />
                     </Form.Item>
-
-                    <Divider />
-
-                    {/* Select songs for this survey */}
-                    <Title level={5}>Questions</Title>
-                    <CreateSurveyQuestions form={form} />
                 </Form>
 
                 <Divider />

@@ -9,7 +9,7 @@ import {
 } from "antd";
 import { useAuth } from '../../services/firebase';
 import { addQuestionSet } from '../../services/firestore';
-import CreateSurveyQuestions from './CreateSurveyQuestions';
+import CreateQuestions from './CreateQuestions';
 
 const { Title } = Typography;
 
@@ -22,7 +22,7 @@ export default function CreateQuestionSet() {
 
     const [form] = Form.useForm();
 
-    // Create new survey
+    // Create new question set
     const handleSubmit = async () => {
         try {
             // Form validation
@@ -33,10 +33,11 @@ export default function CreateQuestionSet() {
                 title: formValues.title,
                 questions: modifyQuestions(formValues.questions),
                 admin: user.displayName,
-                dateAdded: date.toISOString()
+                dateAdded: date.toISOString(),
+                questionCount: formValues.questions.length,
             }
 
-            // // Add survey in Firestore /surveys collection
+            // Add survey in Firestore /questionSets collection
             addQuestionSet(surveyValues);
 
             // Cleanup
@@ -77,7 +78,7 @@ export default function CreateQuestionSet() {
         return modified;
     }
 
-    // Cancel creation of new survey
+    // Cancel creation of new question set
     const handleCancel = () => {
         resetModal();
         setIsModalVisible(false);
@@ -120,7 +121,7 @@ export default function CreateQuestionSet() {
 
                     {/* Select songs for this survey */}
                     <Title level={5}>Questions</Title>
-                    <CreateSurveyQuestions form={form} />
+                    <CreateQuestions form={form} />
                 </Form>
             </Modal>
         </>
