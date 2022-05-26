@@ -68,6 +68,22 @@ export const addQuestionSet = async (surveyValues: IQuestionSet) => {
     }
 }
 
+// Remove a document from /questionSets collection
+export const removeSet = async (setPath: string, questionCount: number) => {
+    // Remove all questions in /questionSets/{name}/questions subcollection
+    for (let i = 1; i < questionCount + 1; i++) { 
+        const docName = `q${i}`;
+        const questionRef = doc(db, `${setPath}/questions/${docName}`);
+        console.log(`deleting ${setPath}/questions/${docName}`);
+        await deleteDoc(questionRef);
+    }
+
+    // Remove from /questionSets
+    const setRef = doc(db, setPath);
+    console.log(`deleting ${setPath}`);
+    await deleteDoc(setRef);
+}
+
 /**
  * SONG FUNCTIONS
  */

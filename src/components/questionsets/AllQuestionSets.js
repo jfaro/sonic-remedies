@@ -1,7 +1,8 @@
 import { db } from '../../services/firebase';
+import { removeSet } from '../../services/firestore'
 import { collection, query, onSnapshot } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import { Alert, Space, Spin, notification } from "antd";
+import { Alert, Space, Spin } from "antd";
 import SetTile from './SetTile';
 
 export default function AllQuestionSets() {
@@ -26,18 +27,9 @@ export default function AllQuestionSets() {
         return () => unsubscribe();
     }, [])
 
-    const handleRemoveSet = (surveyIndex) => {
-        console.log(`${surveyIndex} removed`)
-        //const surveyPath = setRefs[surveyIndex];
-        //removeSurvey(surveyPath);
+    const handleRemoveSet = (setPath, questionCount) => {
+        removeSet(setPath, questionCount);
     }
-
-    const showNotification = (message, description) => {
-        notification.open({
-            message: message,
-            description: description,
-        });
-    };
 
     if (loading) return <Spin />
 
@@ -48,7 +40,7 @@ export default function AllQuestionSets() {
                     return (
                         <SetTile
                             key={idx}
-                            setIndex={setRefs[idx]}
+                            setPath={setRefs[idx]}
                             setData={set} 
                             removeSet={handleRemoveSet} />
                     )

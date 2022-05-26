@@ -1,10 +1,10 @@
 import { Button, Card, Space, Statistic, Popconfirm, Divider } from "antd";
 import ViewQuestionSet from "./ViewQuestions";
 
-const SetTile = ({ setIndex, setData, removeSet }) => {
+const SetTile = ({ setPath, setData, removeSet }) => {
     const { title, questionCount } = setData;
 
-    const confirmDelete = () => removeSet(setIndex);
+    const confirmDelete = () => removeSet(setPath, setData.questionCount);
 
     return (
         <Card
@@ -16,7 +16,7 @@ const SetTile = ({ setIndex, setData, removeSet }) => {
             </Space>
             <Divider />
             <Space>
-                <ViewQuestionSet setData={setData} setPath={setIndex}/>
+                <ViewQuestionSet setData={setData} setPath={setPath}/>
                 <Popconfirm
                     title="Are you sure you want to remove this question set?"
                     onConfirm={confirmDelete}
