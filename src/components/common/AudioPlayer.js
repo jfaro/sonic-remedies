@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button } from 'antd';
 import { PlayCircleOutlined, PauseOutlined } from '@ant-design/icons';
-import useAudio from '../hooks/useAudio';
+import useAudio from '../../hooks/useAudio';
 
-export default function AudioPlayer({song, artist, url, orientation}) {
+export default function AudioPlayer({ song, artist, url, orientation }) {
     const [playing, toggle] = useAudio(new URL(url));
 
     const track = {

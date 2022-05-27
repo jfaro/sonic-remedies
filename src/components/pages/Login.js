@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import { Button, Space, Typography } from 'antd';
 import { GoogleOutlined } from '@ant-design/icons';
-import { db, useAuth } from '../services/firebase';
+import { db, useAuth } from '../../services/firebase';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { collection, doc, getDocs, setDoc, query, where } from 'firebase/firestore';
 

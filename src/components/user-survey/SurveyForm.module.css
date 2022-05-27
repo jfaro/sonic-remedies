@@ -1,0 +1,9 @@
+.surveyForm {
+    width: 100%;
+    max-width: 400px;
+    background: var(--color-bg-raised);
+    padding: 32px;
+    border: var(--border);
+    border-radius: 2px;
+    box-shadow: var(--shadow);
+}

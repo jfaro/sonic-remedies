@@ -1,7 +1,7 @@
 import { Divider, Space, Typography } from "antd"
-import MusicTable from "../components/MusicTable";
-import AllSurveys from '../components/survey/AllSurveys';
-import CreateSurvey from "../components/survey/CreateSurvey";
+import MusicTable from "../admin/MusicTable";
+import AllSurveys from '../admin/AllSurveys';
+import CreateSurvey from "../admin/CreateSurvey";
 
 const { Title } = Typography;
 

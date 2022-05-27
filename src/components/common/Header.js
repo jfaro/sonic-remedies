@@ -1,9 +1,10 @@
-import { Link } from 'react-router-dom';
-import Navigation from './Navigation';
+import { Link } from "react-router-dom";
+import Navigation from "../Navigation";
+import styles from "./Header.module.css";
 
 export default function Header() {
     return (
-        <header className='header'>
+        <header className={styles.header}>
             <Link to="/">
                 <h2>Sonic Remedies</h2>
             </Link>

@@ -1,15 +1,16 @@
-import { Layout } from 'antd';
-import Header from './Header';
-import PagePathViewer from './PagePathViewer';
+import { Layout } from "antd";
+import Header from "./common/Header";
+import PagePathViewer from "./PagePathViewer";
+import styles from "./PageLayout.module.css";
 
 export default function PageLayout({ children }) {
 
     return (
-        <Layout className='app'>
-            <div className='page-content'>
-                <Header />
+        <Layout className={styles.app}>
+            <Header />
+            <div className={styles.pageContent}>
                 <PagePathViewer />
-                <div className='page-center'>
+                <div className={styles.pageCenter}>
                     {children}
                 </div>
             </div>
