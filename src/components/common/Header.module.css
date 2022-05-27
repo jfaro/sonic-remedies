@@ -5,7 +5,7 @@
     align-items: center;
     height: 64px;
     width: 100%;
-    background: var(--color-bg-raised);
+    background: var(--bg-raised);
     border-bottom: var(--border);
     box-shadow: var(--shadow);
     padding: 0 2rem;

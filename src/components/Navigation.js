@@ -1,14 +1,16 @@
-import { useState } from 'react';
-import { Button } from 'antd';
-import { Link, useMatch, useNavigate } from 'react-router-dom';
-import { useAuth } from '../services/firebase';
-import { getAuth, signOut } from 'firebase/auth';
+import { useState } from "react";
+import { Button } from "antd";
+import { Link, useMatch, useNavigate } from "react-router-dom";
+import { useAuth } from "../services/firebase";
+import { getAuth, signOut } from "firebase/auth";
+import styles from "./Navigation.module.css";
 
 export default function Navigation() {
     const { user, isAuthenticated, isAdmin } = useAuth();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const loginPathMatch = useMatch('/login');
+    const onLoginPage = useMatch("/login");
+    const onSurveyPage = useMatch("/survey");
 
     async function handleLogout() {
         setLoading(true);
@@ -19,23 +21,23 @@ export default function Navigation() {
             console.log("An error happened.")
         }
         setLoading(false);
-        navigate('/');
+        navigate("/");
     }
 
     // Show login button if no user is logged in
-    // Don't render login button if on login page
+    // Don"t render login button if on login page
     // Show logout button if a user is logged in
     let loginLogoutButton = null;
 
-    if (!user && !loginPathMatch) {
+    if (!user && !onLoginPage) {
         loginLogoutButton = (
-            <Link to='/login'>
-                <Button type='ghost'>Login</Button>
+            <Link to="/login">
+                <Button type="ghost">Login</Button>
             </Link>);
     } else if (user) {
         loginLogoutButton = (
             <Button
-                type='ghost'
+                type="ghost"
                 onClick={handleLogout}
                 loading={loading}>
                 Logout
@@ -44,14 +46,16 @@ export default function Navigation() {
     }
 
     return (
-        <nav className='navigation'>
-            <Link to="/survey">
-                <Button type='text'>Survey</Button>
-            </Link>
+        <nav className={styles.navigation}>
+            {!onSurveyPage &&
+                <Link to="/survey">
+                    <Button type="text">Survey</Button>
+                </Link>
+            }
             {loginLogoutButton}
             {isAuthenticated && isAdmin ?
                 <Link to="/admin">
-                    <Button type='primary'>Admin Dashboard</Button>
+                    <Button type="primary">Admin</Button>
                 </Link> : null}
         </nav>
     )

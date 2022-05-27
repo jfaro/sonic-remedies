@@ -7,7 +7,7 @@ import { ConfigProvider } from 'antd';
 
 import { AuthenticatedRoute, UnauthenticatedRoute } from './components/Routes';
 import { AuthContextProvider } from './services/firebase';
-import PageLayout from './components/PageLayout';
+import PageLayout from './components/layout/PageLayout';
 import NoData from './components/common/NoData';
 
 import Home from './components/pages/Home';

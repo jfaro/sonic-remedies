@@ -79,7 +79,7 @@ export default function MusicTable() {
      */
     function ChartPlayer() {
         if (playing.length !== 0) {
-            return <AudioPlayer song={playing[0]} artist={playing[1]} url={playing[2]} orientation={'row'}></AudioPlayer>
+            return <AudioPlayer title={playing[0]} artist={playing[1]} url={playing[2]} orientation='row' />;
         } else {
             return null;
         }

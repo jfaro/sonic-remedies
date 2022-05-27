@@ -3,7 +3,8 @@
 :root {
   --border: thin solid #ddd;
   --shadow: 0 0 40px 0 rgba(0, 0, 0, .05);
-  --color-bg-raised: rgb(255, 255, 255);
+  --bg: rgb(238, 242, 245);
+  --bg-raised: rgb(255, 255, 255);
   --max-width: 2000px;
 }
 
@@ -44,10 +45,6 @@
 
 .flex-spaced {
   justify-content: space-between;
-}
-
-.navigation>*+* {
-  margin-left: 2rem;
 }
 
 .footer {

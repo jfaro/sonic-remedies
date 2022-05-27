@@ -1,9 +1,9 @@
-.surveyForm {
+.surveyContainer {
     width: 100%;
-    max-width: 400px;
-    background: var(--color-bg-raised);
-    padding: 32px;
+    max-width: 600px;
+    background: var(--bg-raised);
     border: var(--border);
     border-radius: 2px;
     box-shadow: var(--shadow);
+    padding: 32px;
 }

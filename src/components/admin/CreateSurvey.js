@@ -20,7 +20,6 @@ export default function CreateSurvey() {
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [includedSongs, setIncludedSongs] = useState([]);
 
     const [form] = Form.useForm();
 
@@ -97,19 +96,6 @@ export default function CreateSurvey() {
                     <Title level={5}>Questions</Title>
                     <CreateSurveyQuestions form={form} />
                 </Form>
-
-                <Divider />
-
-                {/* Select songs for this survey */}
-                <Title level={5}>Track options</Title>
-                <List
-                    dataSource={includedSongs}
-                    renderItem={({ idx, title, length }) => (
-                        <List.Item>
-                            {title}
-                        </List.Item>
-                    )}
-                />
             </Modal>
         </>
     )
