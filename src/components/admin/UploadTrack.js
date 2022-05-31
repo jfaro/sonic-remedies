@@ -12,11 +12,11 @@ import {
     Col,
     Divider
 } from "antd";
-import { addToSongsCollection } from "../services/firestore";
-import { uploadSong } from '../services/storage';
+import { addToSongsCollection } from "../../services/firestore";
+import { uploadSong } from '../../services/storage';
 import { UploadOutlined } from "@ant-design/icons";
-import { useAuth } from '../services/firebase';
-import { keyOptions } from "../constants/keyOptions";
+import { useAuth } from '../../services/firebase';
+import { keyOptions } from "../../constants/keyOptions";
 
 export default function UploadTrack() {
     const [form] = Form.useForm();

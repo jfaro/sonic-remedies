@@ -1,0 +1,13 @@
+.header {
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 64px;
+    width: 100%;
+    background: var(--bg-raised);
+    border-bottom: var(--border);
+    box-shadow: var(--shadow);
+    padding: 0 2rem;
+    z-index: 100;
+}

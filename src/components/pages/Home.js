@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button, Space, Typography } from "antd";
-import { useAuth } from '../services/firebase';
+import { useAuth } from '../../services/firebase';
 
 const { Title, Text } = Typography;
 

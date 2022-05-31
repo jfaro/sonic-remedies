@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Table, Tag, Space, Button, Popconfirm, Select } from 'antd';
-import { db } from '../services/firebase';
+import { db } from '../../services/firebase';
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import { CheckCircleTwoTone, CloseCircleTwoTone, CaretRightOutlined, DeleteOutlined } from '@ant-design/icons'
-import { deleteData } from '../services/delete';
+import { deleteData } from '../../services/delete';
 import moment from 'moment';
 import UploadTrack from './UploadTrack';
-import AudioPlayer from './AudioPlayer';
+import AudioPlayer from '../common/AudioPlayer';
 
 /**
  * This component, MusicTable, is used as part of the administrative half of the site.
@@ -79,7 +79,7 @@ export default function MusicTable() {
      */
     function ChartPlayer() {
         if (playing.length !== 0) {
-            return <AudioPlayer song={playing[0]} artist={playing[1]} url={playing[2]} orientation={'row'}></AudioPlayer>
+            return <AudioPlayer title={playing[0]} artist={playing[1]} url={playing[2]} orientation='row' />;
         } else {
             return null;
         }

@@ -7,7 +7,6 @@ const { Option } = Select;
 const questionTypes = [
     { key: 'text', label: 'Text' },
     { key: 'color', label: 'Color' },
-    { key: 'multipleSelect', label: 'Multiple select' },
     { key: 'singleSelect', label: 'Single select' }
 ]
 
