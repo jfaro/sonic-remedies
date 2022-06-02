@@ -1,9 +1,9 @@
-import { db } from '../../services/firebase';
-import { removeSet } from '../../services/firestore'
+import { db } from '../../../services/firebase';
+import { removeSet } from '../../../services/firestore'
 import { collection, query, onSnapshot } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { Alert, Space, Spin } from "antd";
-import SetTile from './SetTile';
+import SetTile from '../SetTile';
 
 export default function AllQuestionSets() {
 
@@ -45,7 +45,7 @@ export default function AllQuestionSets() {
                             removeSet={handleRemoveSet} />
                     )
                 }) : <Alert
-                    message="No surveys created"
+                    message="No question sets created"
                     type="info" />
             }
         </ Space>

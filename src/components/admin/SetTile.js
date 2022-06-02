@@ -1,5 +1,5 @@
 import { Button, Card, Space, Statistic, Popconfirm, Divider } from "antd";
-import ViewQuestionSet from "./ViewQuestions";
+import ViewQuestionSet from "./questionsets/ViewQuestions";
 
 const SetTile = ({ setPath, setData, removeSet }) => {
     const { title, questionCount } = setData;

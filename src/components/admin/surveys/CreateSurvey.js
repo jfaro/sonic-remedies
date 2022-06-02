@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { db } from '../../../services/firebase';
+import { collection, query, onSnapshot } from 'firebase/firestore';
 import {
     Button,
     Divider,
@@ -6,10 +8,13 @@ import {
     Input,
     List,
     Modal,
+    Space,
     Typography
 } from "antd";
-import { useAuth } from '../../services/firebase';
-import { addSurvey } from '../../services/firestore';
+import AddSetsToSurvey from './AddSetsToSurvey'
+import SurveyRequirements from './SurveyRequirements'
+import { useAuth } from '../../../services/firebase';
+import { addSurvey } from '../../../services/firestore';
 
 const { Title } = Typography;
 
@@ -19,8 +24,31 @@ export default function CreateSurvey() {
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [allSets, setAllSets] = useState([]);
+    /**
+     * INCOMPLETE:
+     * I want to be able to get the list of questionSets from
+     * AddSetsToSurvey while the list in that component is being
+     * updated so that I can get the number of questions
+     * that the whole survey has
+     */
+    const [setList, setSetList] = useState([]);  
 
     const [form] = Form.useForm();
+
+    useEffect(() => {
+        const q = query(collection(db, 'questionSets'));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            setIsLoading(true);
+            setAllSets([]);
+            querySnapshot.forEach(document => {
+                const data = document.data();
+                setAllSets(arr => [...arr, data]);
+            })
+            setIsLoading(false);
+        })
+        return () => unsubscribe();
+    }, []);
 
     // Create new survey
     const handleSubmit = async () => {
@@ -32,14 +60,13 @@ export default function CreateSurvey() {
             const surveyValues = {
                 ...formValues,
                 active: false,
-                responses: [],
-                trackIds: [],   // TODO: Add included track IDs
                 admin: user.displayName,
                 dateAdded: date.toISOString()
             }
 
             // // Add survey in Firestore /surveys collection
-            addSurvey(surveyValues);
+            //addSurvey(surveyValues);
+            console.log(surveyValues);
 
             // Cleanup
             setIsLoading(false);
@@ -58,7 +85,6 @@ export default function CreateSurvey() {
 
     // Reset modal to how it appears when freshly opened on page load
     const resetModal = () => {
-        console.log(form);
         form.resetFields();
     }
 
@@ -82,13 +108,28 @@ export default function CreateSurvey() {
                     requiredMark={false}
                     style={{ width: '100%' }}>
 
-                    {/* Select songs for this survey */}
-                    <Title level={5}>Survey title</Title>
+                    {/* Create Survey Metadata */}
+                    <Title level={5}>Survey Title</Title>
                     <Form.Item
                         name='title'
                         rules={[{ required: true, message: 'A title is required' }]}>
                         <Input placeholder="Enter a title for this survey" />
                     </Form.Item>
+
+                    <Divider />
+
+                    {/* Select Question Sets for Survey */}
+                    <Title level={5}>Add Question Sets</Title>
+                    <AddSetsToSurvey form={form} allSets={allSets}/>
+                    
+                    <Divider />
+                    
+                    {/* Select Survey Criteria */}
+                    <Title level={5}>Add Survey Criteria</Title>
+                    <SurveyRequirements />
+                    {/* here should be a button to add a search criteria - set formats for each */}
+                    {/* here should be a list of created criteria */}
+                    {/* here should be a button to generate test playlists */}
                 </Form>
             </Modal>
         </>

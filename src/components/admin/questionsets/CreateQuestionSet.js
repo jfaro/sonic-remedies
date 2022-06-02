@@ -7,8 +7,8 @@ import {
     Modal,
     Typography
 } from "antd";
-import { useAuth } from '../../services/firebase';
-import { addQuestionSet } from '../../services/firestore';
+import { useAuth } from '../../../services/firebase';
+import { addQuestionSet } from '../../../services/firestore';
 import CreateQuestions from './CreateQuestions';
 
 const { Title } = Typography;
@@ -109,7 +109,7 @@ export default function CreateQuestionSet() {
                     requiredMark={false}
                     style={{ width: '100%' }}>
 
-                    {/* Select songs for this survey */}
+                    {/* Create title for question set */}
                     <Title level={5}>Question Set Title</Title>
                     <Form.Item
                         name='title'
@@ -119,7 +119,7 @@ export default function CreateQuestionSet() {
 
                     <Divider />
 
-                    {/* Select songs for this survey */}
+                    {/* Create questions for question set */}
                     <Title level={5}>Questions</Title>
                     <CreateQuestions form={form} />
                 </Form>

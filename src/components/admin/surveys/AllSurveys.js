@@ -1,8 +1,8 @@
-import { db } from '../../services/firebase';
+import { db } from '../../../services/firebase';
 import { collection, query, onSnapshot } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { Alert, Space, Spin, notification } from "antd";
-import SurveyTile from './SurveyTile';
+import SurveyTile from '../SurveyTile';
 import { removeSurvey, updateSurveyActiveStatus } from 'services/firestore';
 
 

@@ -20,8 +20,7 @@ export interface ISurvey {
     title: string,
     admin: string,
     active: boolean,
-    questions: IQuestionSet[],
-    responses: any[],
-    trackIds: string[],
+    questionSets: string[],
+    parameters: any[],
     dateAdded: string
 }

@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Space, Typography, Menu } from "antd";
 import { PlayCircleOutlined, QuestionCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import MusicTable from "../components/MusicTable";
-import AllSurveys from '../components/survey/AllSurveys';
-import AllQuestionSets from "../components/questionsets/AllQuestionSets";
-import CreateSurvey from "../components/survey/CreateSurvey";
-import CreateQuestionSet from "../components/questionsets/CreateQuestionSet";
+import MusicTable from "../admin/MusicTable";
+import AllSurveys from '../admin/surveys/AllSurveys';
+import CreateSurvey from "../admin/surveys/CreateSurvey";
+import CreateQuestionSet from "../admin/questionsets/CreateQuestionSet";
+import AllQuestionSets from "../admin/questionsets/AllQuestionSets";
 
 const { Title } = Typography;
 
