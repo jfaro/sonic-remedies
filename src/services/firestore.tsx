@@ -1,7 +1,11 @@
 import { db } from './firebase';
 import { addDoc, collection, deleteDoc, doc, setDoc, updateDoc } from "firebase/firestore";
-import { ISurvey, IQuestionSet, IQuestion } from '@interface/ISurvey';
-import { ITrack } from '@interface/ITrack';
+import { ISurvey, IQuestionSet, IQuestion } from '../interfaces/ISurvey';
+import { ITrack } from '../interfaces/ITrack';
+
+export const formatTitle = (inputString: string) => {
+    return inputString.toLowerCase().replace(/ /g, "-").trim();
+}
 
 /**
  * SURVEY FUNCTIONS
@@ -39,7 +43,7 @@ export const updateSurveyActiveStatus = async (surveyPath: string, active: boole
 export const addQuestionSet = async (surveyValues: IQuestionSet) => {
     // Separate and clean up questions
     const questions = surveyValues.questions;
-    let title = surveyValues.title.toLowerCase().replace(/ /g, "-").trim();
+    let title = formatTitle(surveyValues.title);
     let docRef = doc(db, 'questionSets', title);
     delete surveyValues.questions;
     
@@ -64,6 +68,22 @@ export const addQuestionSet = async (surveyValues: IQuestionSet) => {
     }
 }
 
+// Remove a document from /questionSets collection
+export const removeSet = async (setPath: string, questionCount: number) => {
+    // Remove all questions in /questionSets/{name}/questions subcollection
+    for (let i = 1; i < questionCount + 1; i++) { 
+        const docName = `q${i}`;
+        const questionRef = doc(db, `${setPath}/questions/${docName}`);
+        console.log(`deleting ${setPath}/questions/${docName}`);
+        await deleteDoc(questionRef);
+    }
+
+    // Remove from /questionSets
+    const setRef = doc(db, setPath);
+    console.log(`deleting ${setPath}`);
+    await deleteDoc(setRef);
+}
+
 /**
  * SONG FUNCTIONS
  */
@@ -72,7 +92,7 @@ export const addQuestionSet = async (surveyValues: IQuestionSet) => {
 export const addToSongsCollection = async (trackValues: ITrack) => {
 
     // Create a document ID of lowercase title with spaces replaced by -
-    let title = trackValues.title.toLowerCase().replace(/ /g, "-").trim();
+    let title = formatTitle(trackValues.title);
     let database = "songs";
 
     // Create new document in /songs collection

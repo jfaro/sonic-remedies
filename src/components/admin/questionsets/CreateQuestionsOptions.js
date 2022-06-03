@@ -1,7 +1,7 @@
 import { Button, Form, Input, Row, Col } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
-const CreateSurveyQuestionOptions = ({ form, questionIndex }) => {
+const CreatQuestionsOptions = ({ form, questionIndex }) => {
 
     const questionTypesWithOptions = ['singleSelect', 'multipleSelect'];
 
@@ -65,4 +65,4 @@ const CreateSurveyQuestionOptions = ({ form, questionIndex }) => {
     )
 }
 
-export default CreateSurveyQuestionOptions
+export default CreatQuestionsOptions

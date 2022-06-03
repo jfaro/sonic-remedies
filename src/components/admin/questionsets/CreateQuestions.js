@@ -1,6 +1,6 @@
 import { Button, Form, Input, Select, Row, Col } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import CreateSurveyQuestionOptions from './CreateSurveyQuestionOptions';
+import CreateQuestionsOptions from './CreateQuestionsOptions';
 
 const { Option } = Select;
 
@@ -10,7 +10,7 @@ const questionTypes = [
     { key: 'singleSelect', label: 'Single select' }
 ]
 
-const CreateSurveyQuestions = ({ form }) => {
+const CreateQuestions = ({ form }) => {
     return (
         <Form.List name='questions'>
 
@@ -68,7 +68,7 @@ const CreateSurveyQuestions = ({ form }) => {
                                     </Row>
 
                                     {/* Question Options */}
-                                    <CreateSurveyQuestionOptions
+                                    <CreateQuestionsOptions
                                         form={form}
                                         question={question}
                                         questionIndex={questionIndex} />
@@ -90,4 +90,4 @@ const CreateSurveyQuestions = ({ form }) => {
     )
 }
 
-export default CreateSurveyQuestions;
+export default CreateQuestions;
