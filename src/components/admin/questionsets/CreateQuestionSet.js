@@ -7,16 +7,10 @@ import {
     Modal,
     Typography
 } from "antd";
-<<<<<<<< HEAD:src/components/admin/questionsets/CreateQuestionSet.js
 import { useAuth } from '../../../services/firebase';
 import { addQuestionSet } from '../../../services/firestore';
 import CreateQuestions from './CreateQuestions';
-========
 import { PlusOutlined } from '@ant-design/icons';
-import { useAuth } from '../../services/firebase';
-import { addQuestionSet } from '../../services/firestore';
-import CreateSurveyQuestions from './CreateSurveyQuestions';
->>>>>>>> 05c089cca6444486a00f3b27d99d353b5720054f:src/components/admin/CreateQuestionSet.js
 
 const { Title } = Typography;
 
