@@ -1,7 +1,11 @@
 import { db } from './firebase';
 import { addDoc, collection, deleteDoc, doc, setDoc, updateDoc } from "firebase/firestore";
-import { ISurvey } from '@interface/ISurvey';
+import { ISurvey, IQuestionSet, IQuestion } from '@interface/ISurvey';
 import { ITrack } from '@interface/ITrack';
+
+/**
+ * SURVEY FUNCTIONS
+ */
 
 // Create a new document in /surveys collection
 export const addSurvey = async (surveyValues: ISurvey) => {
@@ -26,6 +30,43 @@ export const updateSurveyActiveStatus = async (surveyPath: string, active: boole
         active: active
     })
 }
+
+/**
+ * QUESTION SET FUNCTIONS
+ */
+
+// Create a new document in /questionSets collection
+export const addQuestionSet = async (surveyValues: IQuestionSet) => {
+    // Separate and clean up questions
+    const questions = surveyValues.questions;
+    let title = surveyValues.title.toLowerCase().replace(/ /g, "-").trim();
+    let docRef = doc(db, 'questionSets', title);
+    delete surveyValues.questions;
+    
+    // Submit questionSet document to /questionSets
+    try {
+        await setDoc(docRef, surveyValues);
+        console.log(`Success adding document to /questionSets/${title}`, surveyValues);
+    } catch (e) {
+        console.error(`Error adding document to /questionSets/${title}`, e);
+    }
+
+    // Submit individual questions to /questionSet/{title}/questions
+    try{
+        questions?.forEach(async function (q: IQuestion)
+        {
+            docRef = doc(db, `questionSets/${title}/questions`, `q${q.idx}`);
+            await setDoc(docRef, q);
+        });
+        console.log(`Success adding document to /questionSets/${title}/questions`, questions);
+    } catch (e) {
+        console.error(`Error adding document to /questionSets//${title}/questions`, e);
+    }
+}
+
+/**
+ * SONG FUNCTIONS
+ */
 
 // Create a new document in /songs collection
 export const addToSongsCollection = async (trackValues: ITrack) => {

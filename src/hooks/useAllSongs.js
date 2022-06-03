@@ -13,12 +13,12 @@ export function useAllSongs() {
             setIsLoading(true);
             snapshot.forEach(document => {
                 const data = document.data();
-                setSongs([...songs, data]);
+                setSongs(songs => [...songs, data]);
             });
             setIsLoading(false);
         })
         return () => unsubscribe();
-    }, [songs]);
+    }, []);
 
     return [songs, isLoading];
 }

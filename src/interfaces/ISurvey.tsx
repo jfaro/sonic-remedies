@@ -8,11 +8,18 @@ export interface IMultipleChoice extends IQuestion {
     options: string[]
 }
 
+export interface IQuestionSet {
+    title: string,
+    admin: string,
+    dateAdded: string,
+    questions?: IQuestion[],
+}
+
 export interface ISurvey {
     title: string,
     admin: string,
     active: boolean,
-    questions: IQuestion[],
+    questions: IQuestionSet[],
     responses: any[],
     trackIds: string[],
     dateAdded: string
