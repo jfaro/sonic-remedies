@@ -18,7 +18,7 @@ export function useAllSongs() {
             setIsLoading(false);
         })
         return () => unsubscribe();
-    }, []);
+    }, [songs]);
 
     return [songs, isLoading];
 }
