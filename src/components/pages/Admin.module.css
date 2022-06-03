@@ -1,0 +1,8 @@
+.titleRow {
+    display: flex;
+    align-items: flex-start;
+}
+
+.titleRow>*+* {
+    margin-left: 16px;
+}

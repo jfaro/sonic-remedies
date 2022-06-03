@@ -4,10 +4,10 @@ import {
     Divider,
     Form,
     Input,
-    List,
     Modal,
     Typography
 } from "antd";
+import { PlusOutlined } from '@ant-design/icons';
 import { useAuth } from '../../services/firebase';
 import { addSurvey } from '../../services/firestore';
 import CreateSurveyQuestions from './CreateSurveyQuestions';
@@ -64,8 +64,10 @@ export default function CreateSurvey() {
 
     return (
         <>
-            <Button type='primary' onClick={() => setIsModalVisible(true)}>
-                Create new survey
+            <Button
+                icon={<PlusOutlined />}
+                onClick={() => setIsModalVisible(true)}>
+                Create survey
             </Button>
             <Modal
                 title='Create a new survey'

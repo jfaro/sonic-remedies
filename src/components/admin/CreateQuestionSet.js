@@ -7,6 +7,7 @@ import {
     Modal,
     Typography
 } from "antd";
+import { PlusOutlined } from '@ant-design/icons';
 import { useAuth } from '../../services/firebase';
 import { addQuestionSet } from '../../services/firestore';
 import CreateSurveyQuestions from './CreateSurveyQuestions';
@@ -60,8 +61,7 @@ export default function CreateQuestionSet() {
                 type: question.type,
             };
 
-            if (question.type === "multipleSelect" || question.type === "singleSelect")
-            {
+            if (question.type === "multipleSelect" || question.type === "singleSelect") {
                 const qArray = question.questionOptions.map((opt) => {
                     return opt.optionText;
                 });
@@ -90,7 +90,10 @@ export default function CreateQuestionSet() {
 
     return (
         <>
-            <Button type='primary' onClick={() => setIsModalVisible(true)}>
+            <Button
+                icon={<PlusOutlined />}
+                onClick={() => setIsModalVisible(true)}
+            >
                 Create question set
             </Button>
             <Modal

@@ -2,28 +2,30 @@ import { Divider, Space, Typography, Row, Col } from "antd"
 import MusicTable from "../admin/MusicTable";
 import CreateSurvey from "../admin/CreateSurvey";
 import CreateQuestionSet from "../admin/CreateQuestionSet";
+import AllSurveys from "../admin/AllSurveys";
+import styles from "./Admin.module.css";
 
 const { Title } = Typography;
 
 export default function Admin() {
 
     return (
-        <div className="flex-col w-100">
-            <Row>
+        <div className="card">
+            <Row gutter={32}>
                 <Col span={12}>
-                    <Title level={3}>Question Sets</Title>
-                    <Space direction='vertical' size='large'>
+                    <div className={styles.titleRow}>
+                        <Title level={3}>Question Sets</Title>
                         <CreateQuestionSet />
-                    </Space>
+                    </div>
                 </Col>
                 <Col span={12}>
-                    <Title level={3}>Surveys</Title>
-                    <Space direction='vertical' size='large'>
+                    <div className={styles.titleRow}>
+                        <Title level={3}>Surveys</Title>
                         <CreateSurvey />
-                    </Space>
+                    </div>
+                    <AllSurveys />
                 </Col>
             </Row>
-
 
             <Divider />
 

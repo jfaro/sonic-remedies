@@ -5,9 +5,7 @@ import { Alert, Space, Spin, notification } from "antd";
 import SurveyTile from './SurveyTile';
 import { removeSurvey, updateSurveyActiveStatus } from 'services/firestore';
 
-
 export default function AllSurveys() {
-
     const [surveys, setSurveys] = useState([]);
     const [surveyRefs, setSurveyRefs] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -66,21 +64,20 @@ export default function AllSurveys() {
     if (loading) return <Spin />
 
     return (
-        <Space wrap>
-            {
-                surveys.length > 0 ? surveys.map((survey, idx) => {
-                    return (
-                        <SurveyTile
-                            key={idx}
-                            surveyIndex={idx}
-                            surveyData={survey}
-                            removeSurvey={handleRemoveSurvey}
-                            toggleActive={handleToggleActive} />
-                    )
-                }) : <Alert
-                    message="No surveys created"
-                    type="info" />
+        <div className="scroll-container">
+            {surveys.length > 0 ? surveys.map((survey, idx) => {
+                return (
+                    <SurveyTile
+                        key={idx}
+                        surveyIndex={idx}
+                        surveyData={survey}
+                        removeSurvey={handleRemoveSurvey}
+                        toggleActive={handleToggleActive} />
+                )
+            }) : <Alert
+                message="No surveys created"
+                type="info" />
             }
-        </ Space>
+        </div>
     )
 }
