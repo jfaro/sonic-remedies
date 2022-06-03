@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "antd";
 import { Link, useMatch, useNavigate } from "react-router-dom";
-import { useAuth } from "../services/firebase";
+import { useAuth } from "../../services/firebase";
 import { getAuth, signOut } from "firebase/auth";
 import styles from "./Navigation.module.css";
 
