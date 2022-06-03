@@ -6,6 +6,7 @@ import AllSurveys from '../admin/surveys/AllSurveys';
 import CreateSurvey from "../admin/surveys/CreateSurvey";
 import CreateQuestionSet from "../admin/questionsets/CreateQuestionSet";
 import AllQuestionSets from "../admin/questionsets/AllQuestionSets";
+import styles from "./Admin.module.css";
 
 const { Title } = Typography;
 

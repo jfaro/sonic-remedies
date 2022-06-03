@@ -8,7 +8,7 @@ export function SurveyForm() {
     const [questions, loading] = useActiveSurvey();
 
     if (loading) {
-        return <Spin />
+        return <div className="w-100 flex-center"><Spin /></div>;
     }
 
     if (!questions || isEmpty(questions)) {

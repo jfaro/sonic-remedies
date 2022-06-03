@@ -2,6 +2,7 @@
 
 :root {
   --border: thin solid #ddd;
+  --border-radius: 2px;
   --shadow: 0 0 40px 0 rgba(0, 0, 0, .05);
   --bg: rgb(238, 242, 245);
   --bg-raised: rgb(255, 255, 255);
@@ -31,6 +32,7 @@
 }
 
 .flex-center {
+  display: flex;
   align-items: center;
   justify-content: center;
 }
@@ -53,4 +55,30 @@
   align-items: center;
   height: 100px;
   width: 100%;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: var(--bg-raised);
+  border: var(--border);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 32px;
+}
+
+.scroll-container {
+  display: flex;
+  background: var(--bg);
+  border: var(--border);
+  border-radius: var(--border-radius);
+  padding: 16px;
+  width: 100%;
+  overflow-x: scroll;
+  box-shadow: inset var(--shadow);
+}
+
+.scroll-container>*+* {
+  margin-left: 8px;
 }
