@@ -8,6 +8,7 @@ import {
     Input,
     Modal,
     Space,
+    InputNumber,
     Typography
 } from "antd";
 import AddSetsToSurvey from './AddSetsToSurvey'
@@ -61,12 +62,13 @@ export default function CreateSurvey() {
                 ...formValues,
                 active: false,
                 admin: user.displayName,
-                dateAdded: date.toISOString()
+                dateAdded: date.toISOString(),
+                responses: 0
             }
 
             // // Add survey in Firestore /surveys collection
-            //addSurvey(surveyValues);
             console.log(surveyValues);
+            addSurvey(surveyValues);
 
             // Cleanup
             setIsLoading(false);
@@ -111,24 +113,35 @@ export default function CreateSurvey() {
                     style={{ width: '100%' }}>
 
                     {/* Create Survey Metadata */}
-                    <Title level={5}>Survey Title</Title>
+                    <Title level={5}>Survey Data</Title>
                     <Form.Item
+                        label="Survey Title"
                         name='title'
                         rules={[{ required: true, message: 'A title is required' }]}>
                         <Input placeholder="Enter a title for this survey" />
                     </Form.Item>
-
+                    <Form.Item
+                        label="Number of Tracks"
+                        name='numTracks'
+                        rules={[{ required: true, message: 'How many songs are in the survey?' }]}>
+                        <InputNumber min={1} />
+                    </Form.Item>
                     <Divider />
 
                     {/* Select Question Sets for Survey */}
                     <Title level={5}>Add Question Sets</Title>
-                    <AddSetsToSurvey form={form} allSets={allSets}/>
+                    <Title level={5} type="secondary">Pre-Music Section</Title>
+                    <AddSetsToSurvey form={form} allSets={allSets} section="setsPre"/>
+                    <Title level={5} type="secondary">Music Section</Title>
+                    <AddSetsToSurvey form={form} allSets={allSets} section="setsMusic"/>
+                    <Title level={5} type="secondary">Post-Music Section</Title>
+                    <AddSetsToSurvey form={form} allSets={allSets} section="setsPost"/>
                     
                     <Divider />
                     
                     {/* Select Survey Criteria */}
                     <Title level={5}>Add Survey Criteria</Title>
-                    <SurveyRequirements />
+                    <SurveyRequirements form={form} />
                     {/* here should be a button to add a search criteria - set formats for each */}
                     {/* here should be a list of created criteria */}
                     {/* here should be a button to generate test playlists */}

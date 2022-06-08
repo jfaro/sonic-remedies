@@ -12,7 +12,7 @@ import { formatTitle } from 'services/firestore';
 
 const { Option } = Select;
 
-const AddSetsToSurvey = ({ form, allSets }) => {
+const AddSetsToSurvey = ({ form, allSets, section }) => {
     const [setList, setSetList] = useState([]);
 
     useEffect(() => {
@@ -24,7 +24,7 @@ const AddSetsToSurvey = ({ form, allSets }) => {
     }, []);
 
     return (
-        <Form.List name='questionSets'>
+        <Form.List name={section}>
 
             {/* For each added set, do the following... */}
             {(sets, { add, remove }) => {
@@ -39,28 +39,18 @@ const AddSetsToSurvey = ({ form, allSets }) => {
                                         <Col>
                                             <Form.Item
                                                 {...set}
-                                                name={[setIndex, 'set']}
+                                                name={setIndex}
                                                 rules={[{
                                                     required: true,
                                                     message: 'Missing response type'
                                                 }]}>
-                                                <Select style={{ width: '550px' }}>
+                                                <Select style={{ width: '700px' }}>
                                                     {(setList.map((type, idx) => (
                                                         <Option key={idx} value={type.key}>
                                                             {type.label}
                                                         </Option>
                                                     )))}
                                                 </Select>
-                                            </Form.Item>
-                                        </Col>
-
-                                        {/* Should the question set have music with it */}
-                                        <Col>
-                                            <Form.Item
-                                                {...set}
-                                                name={[setIndex, 'playSong']}
-                                                valuePropName="checked">
-                                                <Checkbox>Play Song</Checkbox>
                                             </Form.Item>
                                         </Col>
 

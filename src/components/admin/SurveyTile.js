@@ -1,7 +1,7 @@
 import { Button, Card, Space, Statistic, Tag, Popconfirm, Divider } from "antd";
 
 const SurveyTile = ({ surveyIndex, surveyData, removeSurvey, toggleActive }) => {
-    const { title, questions, responses, active } = surveyData;
+    const { title, active, numTracks, responses } = surveyData;
     const status = active ? <Tag color="green">Active</Tag> : null;
 
     const confirmDelete = () => removeSurvey(surveyIndex);
@@ -14,8 +14,8 @@ const SurveyTile = ({ surveyIndex, surveyData, removeSurvey, toggleActive }) => 
             hoverable={true}
             style={{ width: '240px' }}>
             <Space>
-                <Statistic title="Questions" value={questions.length} />
-                <Statistic title="Responses" value={responses.length} />
+                <Statistic title="Tracks" value={numTracks} />
+                <Statistic title="Responses" value={responses} />
             </Space>
             <Divider />
             <Space>

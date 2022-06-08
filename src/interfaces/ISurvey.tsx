@@ -20,7 +20,11 @@ export interface ISurvey {
     title: string,
     admin: string,
     active: boolean,
-    questionSets: string[],
-    parameters: any[],
+    numTracks: number,
+    setsPre: string[],
+    setsMusic: string[],
+    setsPost: string[],
+    requirements: any[],
+    responses: number,
     dateAdded: string
 }

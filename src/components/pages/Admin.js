@@ -12,7 +12,7 @@ const { Title } = Typography;
 
 
 export default function Admin() {
-    const [current, setCurrent] = useState('tracks');
+    const [current, setCurrent] = useState('surveys');
 
     const items = [
         {
@@ -38,34 +38,34 @@ export default function Admin() {
 
     function QuestionSets() {
         return(
-            <p>
+            <div>
                 <Title level={3}>Question Sets</Title>
                 <Space direction='vertical' size='large'>
                     <CreateQuestionSet />
                     <AllQuestionSets></AllQuestionSets>
                 </Space> 
-            </p>
+            </div>
         );
     }
 
     function Surveys() {
         return(
-            <p>
+            <div>
                 <Title level={3}>Surveys</Title>
                 <Space direction='vertical' size='large'>
                     <CreateSurvey />
                     <AllSurveys></AllSurveys>
                 </Space> 
-            </p>
+            </div>
         );
     }
 
     function Tracks() {
         return(
-            <p>
+            <div>
                 <Title level={3}>Uploaded Tracks</Title>
                 <MusicTable /> 
-            </p>
+            </div>
         );
     }
 
@@ -81,10 +81,7 @@ export default function Admin() {
 
     return (
         <div className="flex-col w-100">
-            <p>
-                <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items} />
-            </p>
-            
+            <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items} />
             <AdminPage></AdminPage>
         </div>
     )

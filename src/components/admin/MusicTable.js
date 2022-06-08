@@ -1,5 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Table, Tag, Space, Button, Popconfirm, Select } from 'antd';
+import { 
+    Table, 
+    Tag, 
+    Space, 
+    Button, 
+    Popconfirm, 
+    Select 
+} from 'antd';
 import { db } from '../../services/firebase';
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import { CheckCircleTwoTone, CloseCircleTwoTone, CaretRightOutlined, DeleteOutlined } from '@ant-design/icons'

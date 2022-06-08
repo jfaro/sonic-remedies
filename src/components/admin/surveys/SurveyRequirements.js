@@ -5,6 +5,7 @@ import {
     Input, 
     Select, 
     Row, 
+    TimePicker,
     Col 
 } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
@@ -13,9 +14,9 @@ import { formatTitle } from 'services/firestore';
 const { Option } = Select;
 
 const requirementTypes = [
-    { key: 'lengthMax', label: 'Song Length (Max)' },
-    { key: 'lengthMin', label: 'Song Length (Min)' },
-    { key: 'require', label: 'Song Qualities' }
+    { key: 'lengthLonger', label: 'Length Longer Than' },
+    { key: 'lengthShorter', label: 'Length Shorter Than' },
+    //{ key: 'require', label: 'Song Qualities' }
 ]
 
 const qualities = [
@@ -46,8 +47,11 @@ const SurveyRequirements = () => {
                                                 rules={[{
                                                     required: true,
                                                     message: 'Missing response type'
-                                                }]}>
-                                                <Select style={{ width: '200px' }}>
+                                                }]}
+                                                shouldUpdate={(prev, curr) =>
+                                                    prev !== curr
+                                                }>
+                                                <Select style={{ width: '150px' }}>
                                                     {(requirementTypes.map((type, idx) => (
                                                         <Option key={idx} value={type.key}>
                                                             {type.label}
@@ -56,16 +60,47 @@ const SurveyRequirements = () => {
                                                 </Select>
                                             </Form.Item>
                                         </Col>
-
-                                        {/* Should the question set have music with it */}
+                                        
+                                        {/* Option for number of songs */}
                                         <Col>
                                             <Form.Item
                                                 {...req}
-                                                name={'max'}
+                                                name={[reqIndex, 'num']}
+                                                style={{ width: '150px' }}
+                                                rules={[{
+                                                    required: true,
+                                                    message: 'Missing response type'
+                                                }]}
                                                 >
+                                                <Input placeholder="Number of Songs" />
+                                            </Form.Item>
+                                        </Col>
+
+                                        {/* Option for length of music */}
+                                        <Col>
+                                            <Form.Item
+                                                {...req}
+                                                name={[reqIndex, 'time']}
+                                                style={{ width: '150px' }}
+                                                >
+                                                {/*<TimePicker format={'mm:ss'} placeholder="Song Length" showNow={false}/>*/}
                                                 <Input placeholder="Length in Seconds" />
                                             </Form.Item>
                                         </Col>
+
+                                        {/* Option for qualities in track */}
+                                        {/*
+                                        <Col>
+                                            <Form.Item
+                                                {...req}
+                                                name={[reqIndex, 'quality']}
+                                                >
+                                                <Select style={{ width: '150px' }}>
+                                                    <Option value="improv">Improvisation</Option>
+                                                    <Option value="texture">Texture</Option>
+                                                </Select>
+                                            </Form.Item>
+                                        </Col>*/}
 
                                         {/* Remove this question */}
                                         <Col>
