@@ -1,22 +1,19 @@
-import { useState, useEffect } from 'react';
 import { 
     Button, 
     Form, 
     Input, 
     Select, 
     Row, 
-    TimePicker,
     Col 
 } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { formatTitle } from 'services/firestore';
 
 const { Option } = Select;
 
 const requirementTypes = [
     { key: 'lengthLonger', label: 'Length Longer Than' },
     { key: 'lengthShorter', label: 'Length Shorter Than' },
-    //{ key: 'require', label: 'Song Qualities' }
+    { key: 'require', label: 'Song Qualities' }
 ]
 
 const qualities = [

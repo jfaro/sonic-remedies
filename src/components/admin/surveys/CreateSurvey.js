@@ -7,7 +7,6 @@ import {
     Form,
     Input,
     Modal,
-    Space,
     InputNumber,
     Typography
 } from "antd";
