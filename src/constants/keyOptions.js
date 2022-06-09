@@ -1,5 +1,6 @@
 import { modeOptions } from "./modeOptions";
 
+// Code for all of the key signatures used in UploadTrack.js
 export const keyOptions = [
     {
         value: 'A♭',

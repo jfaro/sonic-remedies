@@ -3,6 +3,7 @@ import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 const CreatQuestionsOptions = ({ form, questionIndex }) => {
 
+    // TODO: Consider modifying this later - I believe multipleSelect questions were removed.
     const questionTypesWithOptions = ['singleSelect', 'multipleSelect'];
 
     return (

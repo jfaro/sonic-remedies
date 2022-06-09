@@ -14,6 +14,11 @@ const { Option } = Select;
 const AddSetsToSurvey = ({ form, allSets, section }) => {
     const [setList, setSetList] = useState([]);
 
+    /**
+     * Get a list of all existing question sets and format them for AntDesign <Select>
+     * TODO: Currently, to avoid sets appearing multiple times, the setList is cleared and refilled every
+     * rerender. If there's a way to have this run *only* at the start, then that line can be removed.
+     */
     useEffect(() => {
         setSetList([]);
         allSets.forEach(set => {

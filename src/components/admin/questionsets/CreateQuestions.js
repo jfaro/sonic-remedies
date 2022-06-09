@@ -39,7 +39,7 @@ const CreateQuestions = ({ form }) => {
                                         </Col>
 
 
-                                        {/* Question type */}
+                                        {/* Type of Question, taken from questionTypes */}
                                         <Col>
                                             <Form.Item
                                                 {...question}

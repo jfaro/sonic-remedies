@@ -79,6 +79,7 @@ export default function UploadTrack() {
 
     const uploadOptions = {
         name: 'file',
+        // TODO: This console.log is for testing purposes to see what data is obtained from the uploaded file
         onChange(info) {
             console.log(info.file, info.fileList);
         },
@@ -169,6 +170,8 @@ export default function UploadTrack() {
 
                     {/* Row 3 */}
                     <Row gutter={formGutter}>
+
+                        {/* Column 1.1 - Track length */}
                         <Col span={6}>
                             <Form.Item
                                 label="Track Length (in seconds)"
@@ -177,6 +180,8 @@ export default function UploadTrack() {
                                 <InputNumber style={{ width: '100%' }} />
                             </Form.Item>
                         </Col>
+
+                        {/* Column 1.2 - Track tempo */}
                         <Col span={6}>
                             <Form.Item
                                 label="Track Tempo"
@@ -185,6 +190,8 @@ export default function UploadTrack() {
                                 <InputNumber style={{ width: '100%' }} />
                             </Form.Item>
                         </Col>
+
+                        {/* Column 2 - Key Signature and Musical mode */}
                         <Col span={12}>
                             <Form.Item
                                 label="Key and Mode"
@@ -195,7 +202,10 @@ export default function UploadTrack() {
                         </Col>
                     </Row>
 
+                    {/* Row 4 */}
                     <Row gutter={formGutter}>
+
+                        {/* Column 1.1 - Consistent Texture */}
                         <Col span={6}>
                             <Form.Item
                                 label="Consistent Texture"
@@ -208,6 +218,8 @@ export default function UploadTrack() {
                                 </Radio.Group>
                             </Form.Item>
                         </Col>
+
+                        {/* Column 1.2 - Improvisation */}
                         <Col span={6}>
                             <Form.Item
                                 label="Improvisation"

@@ -51,6 +51,7 @@ export default function MusicTable() {
                 }
             });
 
+            // Create filter list of admins
             const tempAdmin = [];
             adminList.forEach((admin) => {
                 tempAdmin.push({
@@ -159,6 +160,7 @@ export default function MusicTable() {
             dataIndex: 'genre',
             render: tags => (
                 <>
+                    {/* Creates individual Ant Design tags for each genre */}
                     {tags.map(tag => {
                         return (
                             <Tag color={'geekblue'} key={tag}>

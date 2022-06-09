@@ -3,6 +3,11 @@ import { addDoc, collection, deleteDoc, doc, setDoc, updateDoc } from "firebase/
 import { ISurvey, IQuestionSet, IQuestion } from '../interfaces/ISurvey';
 import { ITrack } from '../interfaces/ITrack';
 
+/**
+ * HELPER FUNCTIONS
+ */
+
+// Takes string input and formats it into a form acceptable as a Firebase document name
 export const formatTitle = (inputString: string) => {
     return inputString.toLowerCase().replace(/ /g, "-").trim();
 }
@@ -59,6 +64,8 @@ export const addQuestionSet = async (surveyValues: IQuestionSet) => {
     try{
         questions?.forEach(async function (q: IQuestion)
         {
+            // Each question's document title is it's question number in order: q1, q2, q3, etc.
+            // If you update the naming scheme here, update removeSet() accordingly
             docRef = doc(db, `questionSets/${title}/questions`, `q${q.idx}`);
             await setDoc(docRef, q);
         });
@@ -70,7 +77,15 @@ export const addQuestionSet = async (surveyValues: IQuestionSet) => {
 
 // Remove a document from /questionSets collection
 export const removeSet = async (setPath: string, questionCount: number) => {
-    // Remove all questions in /questionSets/{name}/questions subcollection
+    /**
+     * Remove all questions in /questionSets/{name}/questions subcollection
+     * 
+     * NOTE: This is required since Firebase does not automatically remove
+     * subcollections when deleting a parent collection
+     * 
+     * ADDITIONAL NOTE: This is based on the assumption the "q1, q2, q3" naming 
+     * scheme is kept from addQuestionSet(), if that scheme changes, update this one accordingly
+     */
     for (let i = 1; i < questionCount + 1; i++) { 
         const docName = `q${i}`;
         const questionRef = doc(db, `${setPath}/questions/${docName}`);
@@ -78,7 +93,7 @@ export const removeSet = async (setPath: string, questionCount: number) => {
         await deleteDoc(questionRef);
     }
 
-    // Remove from /questionSets
+    // Remove question set from /questionSets
     const setRef = doc(db, setPath);
     console.log(`deleting ${setPath}`);
     await deleteDoc(setRef);

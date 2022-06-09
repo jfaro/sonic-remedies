@@ -26,13 +26,13 @@ export default function CreateSurvey() {
     const [isLoading, setIsLoading] = useState(false);
     const [allSets, setAllSets] = useState([]);
     /**
-     * INCOMPLETE:
+     * TODO:
      * I want to be able to get the list of questionSets from
      * AddSetsToSurvey while the list in that component is being
      * updated so that I can get the number of questions
      * that the whole survey has
      */
-    const [setList, setSetList] = useState([]);  
+    //const [setList, setSetList] = useState([]);  
 
     const [form] = Form.useForm();
 
@@ -66,7 +66,6 @@ export default function CreateSurvey() {
             }
 
             // // Add survey in Firestore /surveys collection
-            console.log(surveyValues);
             addSurvey(surveyValues);
 
             // Cleanup

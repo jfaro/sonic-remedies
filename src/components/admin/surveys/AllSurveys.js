@@ -1,7 +1,7 @@
 import { db } from '../../../services/firebase';
 import { collection, query, onSnapshot } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import { Alert, Space, Spin, notification } from "antd";
+import { Alert, Spin, notification } from "antd";
 import SurveyTile from '../SurveyTile';
 import { removeSurvey, updateSurveyActiveStatus } from 'services/firestore';
 
@@ -10,6 +10,7 @@ export default function AllSurveys() {
     const [surveyRefs, setSurveyRefs] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    // Gets a list of every survey in the Firebase
     useEffect(() => {
         const q = query(collection(db, 'surveys'));
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -26,11 +27,13 @@ export default function AllSurveys() {
         return () => unsubscribe();
     }, [])
 
+    // Removes the survey from the database
     const handleRemoveSurvey = (surveyIndex) => {
         const surveyPath = surveyRefs[surveyIndex];
         removeSurvey(surveyPath);
     }
 
+    // Sets the survey as active or inactive.
     const handleToggleActive = (surveyIndex) => {
         const surveyPath = surveyRefs[surveyIndex];
 
@@ -46,7 +49,9 @@ export default function AllSurveys() {
             if (survey.active) {
                 noActiveSurveys = false;
             }
-        })
+        });
+
+        // If no surveys are active, forces last active survey to be active.
         if (noActiveSurveys) {
             updateSurveyActiveStatus(surveyPath, true);
         } else {
@@ -54,6 +59,7 @@ export default function AllSurveys() {
         }
     }
 
+    // Helper function to give user error message, used in handleToggleActive()
     const showNotification = (message, description) => {
         notification.open({
             message: message,

@@ -8,6 +8,9 @@ import { collection, doc, getDocs, setDoc, query, where } from 'firebase/firesto
 
 const { Title, Text } = Typography;
 
+/**
+ * Code for the login page of the site.
+ */
 export default function Login() {
     const [isMounted, setIsMounted] = useState(false);
     const [loading, setLoading] = useState(false);

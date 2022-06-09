@@ -1,3 +1,4 @@
+// Code for all the mode options used as a child in keyOptions.js, which is used in UploadTrack.js
 export const modeOptions = [
         {
                 value: 'Major',
