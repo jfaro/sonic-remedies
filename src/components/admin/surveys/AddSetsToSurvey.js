@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { 
     Button, 
     Form, 
-    Checkbox, 
     Select, 
     Row, 
     Col 
@@ -12,9 +11,14 @@ import { formatTitle } from 'services/firestore';
 
 const { Option } = Select;
 
-const AddSetsToSurvey = ({ form, allSets }) => {
+const AddSetsToSurvey = ({ form, allSets, section }) => {
     const [setList, setSetList] = useState([]);
 
+    /**
+     * Get a list of all existing question sets and format them for AntDesign <Select>
+     * TODO: Currently, to avoid sets appearing multiple times, the setList is cleared and refilled every
+     * rerender. If there's a way to have this run *only* at the start, then that line can be removed.
+     */
     useEffect(() => {
         setSetList([]);
         allSets.forEach(set => {
@@ -24,7 +28,7 @@ const AddSetsToSurvey = ({ form, allSets }) => {
     }, []);
 
     return (
-        <Form.List name='questionSets'>
+        <Form.List name={section}>
 
             {/* For each added set, do the following... */}
             {(sets, { add, remove }) => {
@@ -39,28 +43,18 @@ const AddSetsToSurvey = ({ form, allSets }) => {
                                         <Col>
                                             <Form.Item
                                                 {...set}
-                                                name={[setIndex, 'set']}
+                                                name={setIndex}
                                                 rules={[{
                                                     required: true,
                                                     message: 'Missing response type'
                                                 }]}>
-                                                <Select style={{ width: '550px' }}>
+                                                <Select style={{ width: '700px' }}>
                                                     {(setList.map((type, idx) => (
                                                         <Option key={idx} value={type.key}>
                                                             {type.label}
                                                         </Option>
                                                     )))}
                                                 </Select>
-                                            </Form.Item>
-                                        </Col>
-
-                                        {/* Should the question set have music with it */}
-                                        <Col>
-                                            <Form.Item
-                                                {...set}
-                                                name={[setIndex, 'playSong']}
-                                                valuePropName="checked">
-                                                <Checkbox>Play Song</Checkbox>
                                             </Form.Item>
                                         </Col>
 

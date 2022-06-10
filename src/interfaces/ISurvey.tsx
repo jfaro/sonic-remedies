@@ -1,3 +1,4 @@
+// TODO: Look into modifying, I believe multipleSelect isn't a usable option anymore.
 export interface IQuestion {
     idx: number,
     prompt: string,
@@ -16,11 +17,19 @@ export interface IQuestionSet {
     questionCount: number,
 }
 
+/**
+ * TODO: At this point I have no clue whether this ISurvey interface 
+ * properly reflects the current structure of surveys. Modify if necessary.
+ */
 export interface ISurvey {
     title: string,
     admin: string,
     active: boolean,
-    questionSets: string[],
-    parameters: any[],
+    numTracks: number,
+    setsPre: string[],
+    setsMusic: string[],
+    setsPost: string[],
+    requirements: any[],
+    responses: number,
     dateAdded: string
 }

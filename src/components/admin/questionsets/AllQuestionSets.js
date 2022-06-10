@@ -11,6 +11,12 @@ export default function AllQuestionSets() {
     const [setRefs, setSetRefs] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    /**
+     * Get all question sets from /questionSets in the Firebase
+     * setQuestionSets() stores the actual questions in the set
+     * setSetRefs() stores the Firebase path for the set,
+     * so it's easier to obtain the actual questions
+     */
     useEffect(() => {
         const d = query(collection(db, 'questionSets'));
         const unsubscribe = onSnapshot(d, (querySnapshot) => {

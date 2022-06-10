@@ -15,8 +15,6 @@ export default function Survey() {
     const randomSong = songs[randomSongIndex];
     const { title, artist, url } = randomSong;
 
-    console.log(songs);
-
     return (
         <div className="flex-col flex-center w-100 h-100">
             <div className="card" style={{ maxWidth: '600px' }}>

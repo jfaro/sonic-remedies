@@ -4,6 +4,9 @@ import { useAuth } from '../../services/firebase';
 
 const { Title, Text } = Typography;
 
+/**
+ * Code for the home front page.
+ */
 export default function Home() {
     const { user } = useAuth();
 

@@ -51,7 +51,7 @@ export default function CreateQuestionSet() {
     }
 
     // Convert questions from form values into IQuestion or IMultipleChoice format
-    // Andrew Note: I'm gonna scream.
+    // Andrew Note: I'm gonna scream. Is this even neccessary? 
     const modifyQuestions = (questions) => {
         let count = 1;
 

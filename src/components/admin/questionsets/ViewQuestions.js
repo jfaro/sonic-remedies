@@ -40,6 +40,8 @@ export default function ViewQuestionSet({ setData, setPath }) {
      * This is a carryover function from CreateSurvey.js,
      * this is where code to submit edits to the questions should go
      * when that gets implemented
+     * 
+     * In short, this pretty much does nothing but close the Modal.
      */
     const handleSubmit = async () => {
         setIsLoading(false);

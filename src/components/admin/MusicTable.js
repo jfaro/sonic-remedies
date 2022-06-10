@@ -1,5 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Table, Tag, Space, Button, Popconfirm, Select } from 'antd';
+import { 
+    Table, 
+    Tag, 
+    Space, 
+    Button, 
+    Popconfirm, 
+    Select 
+} from 'antd';
 import { db } from '../../services/firebase';
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import { CheckCircleTwoTone, CloseCircleTwoTone, CaretRightOutlined, DeleteOutlined } from '@ant-design/icons'
@@ -44,6 +51,7 @@ export default function MusicTable() {
                 }
             });
 
+            // Create filter list of admins
             const tempAdmin = [];
             adminList.forEach((admin) => {
                 tempAdmin.push({
@@ -152,6 +160,7 @@ export default function MusicTable() {
             dataIndex: 'genre',
             render: tags => (
                 <>
+                    {/* Creates individual Ant Design tags for each genre */}
                     {tags.map(tag => {
                         return (
                             <Tag color={'geekblue'} key={tag}>
