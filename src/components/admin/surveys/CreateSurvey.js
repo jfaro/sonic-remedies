@@ -122,7 +122,7 @@ export default function CreateSurvey() {
                         label="Number of Tracks"
                         name='numTracks'
                         rules={[{ required: true, message: 'How many songs are in the survey?' }]}>
-                        <InputNumber min={1} />
+                        <InputNumber min={0} />
                     </Form.Item>
                     <Divider />
 
@@ -138,7 +138,7 @@ export default function CreateSurvey() {
                     <Divider />
                     
                     {/* Select Survey Criteria */}
-                    <Title level={5}>Add Survey Criteria</Title>
+                    <Title level={5}>Add Playlist Criteria</Title>
                     <SurveyRequirements form={form} />
                     {/* here should be a button to add a search criteria - set formats for each */}
                     {/* here should be a list of created criteria */}

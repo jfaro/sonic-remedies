@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Space, Typography, Menu } from "antd";
-import { PlayCircleOutlined, QuestionCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { PlayCircleOutlined, QuestionCircleOutlined, FormOutlined } from '@ant-design/icons';
 import MusicTable from "../admin/MusicTable";
 import AllSurveys from '../admin/surveys/AllSurveys';
 import CreateSurvey from "../admin/surveys/CreateSurvey";
@@ -31,7 +31,7 @@ export default function Admin() {
         {
             label: 'Surveys',
             key: 'surveys',
-            icon: <InfoCircleOutlined />,
+            icon: <FormOutlined />,
         }
     ];
     */
@@ -93,7 +93,7 @@ export default function Admin() {
             <Menu mode="horizontal" onClick={onClick}>
                 <Menu.Item icon={<PlayCircleOutlined/>} key="tracks">Uploaded Tracks</Menu.Item>
                 <Menu.Item icon={<QuestionCircleOutlined />} key="qsets">Question Sets</Menu.Item>
-                <Menu.Item icon={<InfoCircleOutlined />} key="surveys">Surveys</Menu.Item>
+                <Menu.Item icon={<FormOutlined />} key="surveys">Surveys</Menu.Item>
             </Menu>
             {/**
              * TODO: Ok, this one's a doozy. I could've sworn this menu code worked, but apparently we're on antd 4.19.2? And the below code is antd >4.20 
